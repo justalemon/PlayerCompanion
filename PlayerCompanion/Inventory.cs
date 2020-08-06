@@ -15,11 +15,6 @@ namespace PlayerCompanion
     {
         #region Private Fields
 
-        private static readonly string locationMod = new Uri(Path.GetDirectoryName(Assembly.GetCallingAssembly().CodeBase)).LocalPath;
-        private static readonly string locationFolder = Path.Combine(locationMod, "PlayerCompanion");
-        private static readonly string locationInventoryData = Path.Combine(locationFolder, "Inventory");
-        private static readonly string locationConfig = Path.Combine(locationFolder, "Inventory.json");
-
         private static readonly Dictionary<Model, PedInventory> inventories = new Dictionary<Model, PedInventory>();
         private static readonly List<Assembly> completed = new List<Assembly>();
 
@@ -69,9 +64,9 @@ namespace PlayerCompanion
         public Inventory()
         {
             // If the configuration file does exists, load it
-            if (File.Exists(locationConfig))
+            if (File.Exists(Locations.ConfigInventory))
             {
-                string contents = File.ReadAllText(locationConfig);
+                string contents = File.ReadAllText(Locations.ConfigInventory);
                 Configuration = JsonConvert.DeserializeObject<InventoryConfiguration>(contents);
 
             }
@@ -125,9 +120,9 @@ namespace PlayerCompanion
             // Dump the contents to a JSON String
             string contents = JsonConvert.SerializeObject(Configuration);
             // Create the folder (if there is none)
-            Directory.CreateDirectory(locationFolder);
+            Directory.CreateDirectory(Locations.ModWorkDir);
             // And dumps the contents of the file
-            File.WriteAllText(locationConfig, contents);
+            File.WriteAllText(Locations.ConfigInventory, contents);
         }
         /// <summary>
         /// Gets the Inventory of a specific <see cref="Ped"/> <see cref="Model"/>.
@@ -149,7 +144,7 @@ namespace PlayerCompanion
             }
 
             // Make the location of the file for the ped model
-            string file = Path.Combine(locationInventoryData, $"{model.Hash}.json");
+            string file = Path.Combine(Locations.InventoryData, $"{model.Hash}.json");
 
             // If there is none, create a new one and send it
             if (!File.Exists(file))

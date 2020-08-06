@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 
 namespace PlayerCompanion
 {
@@ -13,9 +12,6 @@ namespace PlayerCompanion
     public class PedInventory
     {
         #region Private Fields
-
-        private static readonly string locationMod = new Uri(Path.GetDirectoryName(Assembly.GetCallingAssembly().CodeBase)).LocalPath;
-        private static readonly string locationInventoryData = Path.Combine(locationMod, "PlayerCompanion", "Inventory");
 
         private readonly List<Item> items = new List<Item>();
 
@@ -73,9 +69,9 @@ namespace PlayerCompanion
         /// </summary>
         public void Save()
         {
-            Directory.CreateDirectory(locationInventoryData);
+            Directory.CreateDirectory(Locations.InventoryData);
             string json = JsonConvert.SerializeObject(items);
-            File.WriteAllText(Path.Combine(locationInventoryData, $"{Model.Hash}.json"), json);
+            File.WriteAllText(Path.Combine(Locations.InventoryData, $"{Model.Hash}.json"), json);
         }
 
         #endregion
