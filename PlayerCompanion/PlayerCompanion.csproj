@@ -27,7 +27,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ScriptHookVDotNet3" Version="3.0.2">
+    <PackageReference Include="ScriptHookVDotNet3" Version="3.0.4">
       <IncludeAssets>compile</IncludeAssets>
     </PackageReference>
   </ItemGroup>
