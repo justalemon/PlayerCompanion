@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30323.103
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayerCompanion", "PlayerCompanion\PlayerCompanion.csproj", "{94EBB9BE-C7ED-4D13-8C83-376F609B127E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{94EBB9BE-C7ED-4D13-8C83-376F609B127E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94EBB9BE-C7ED-4D13-8C83-376F609B127E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94EBB9BE-C7ED-4D13-8C83-376F609B127E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94EBB9BE-C7ED-4D13-8C83-376F609B127E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {26EF3B10-B617-4B7D-ACA0-BC073D42D690}
+	EndGlobalSection
+EndGlobal
