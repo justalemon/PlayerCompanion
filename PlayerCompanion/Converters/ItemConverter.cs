@@ -2,7 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 
-namespace PlayerCompanion
+namespace PlayerCompanion.Converters
 {
     /// <summary>
     /// Serializes and Deserializes inventory items.
