@@ -21,6 +21,7 @@ namespace PlayerCompanion
         private static readonly string locationConfig = Path.Combine(locationFolder, "Inventory.json");
 
         private static readonly Dictionary<Model, PedInventory> inventories = new Dictionary<Model, PedInventory>();
+        private static readonly List<Assembly> completed = new List<Assembly>();
 
         #endregion
 
@@ -53,6 +54,10 @@ namespace PlayerCompanion
                 }
             }
         }
+        /// <summary>
+        /// Non unique items that can be given randomly.
+        /// </summary>
+        public static List<Type> NonUniqueItems { get; } = new List<Type>();
 
         #endregion
 
@@ -85,6 +90,33 @@ namespace PlayerCompanion
 
         #region Public Functions
 
+        /// <summary>
+        /// Initializes the Inventory class for the Calling Assembly.
+        /// You need to call this function in your Script Constructor once.
+        /// </summary>
+        public static void Initialize()
+        {
+            // Get the assembly that called this function
+            Assembly assembly = Assembly.GetCallingAssembly();
+            // If this item is already in the completed list, raise an exception
+            if (completed.Contains(assembly))
+            {
+                throw new InvalidOperationException("The Assembly has already completed the Initialization process.");
+            }
+
+            // Otherwise, get all of the types in the assembly
+            foreach (Type type in assembly.GetTypes())
+            {
+                // If the type is a class and is not unique, add it to the list to be given randomly
+                if (type.GetTypeInfo().IsClass && Attribute.GetCustomAttribute(type, typeof(InventoryUniqueAttribute)) == null)
+                {
+                    NonUniqueItems.Add(type);
+                }
+            }
+
+            // Finally, mark the class initialization as complete
+            completed.Add(assembly);
+        }
         /// <summary>
         /// Saves the configuration of the inventory.
         /// </summary>
