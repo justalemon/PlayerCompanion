@@ -31,6 +31,10 @@ namespace PlayerCompanion
         /// If this inventory item has a valid image to use.
         /// </summary>
         public virtual bool HasImage => false;
+        /// <summary>
+        /// The Price of this item on in game money.
+        /// </summary>
+        public abstract int Price { get; }
 
         #endregion
 
