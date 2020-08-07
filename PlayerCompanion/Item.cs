@@ -12,17 +12,13 @@ namespace PlayerCompanion
         #region Public Properties
 
         /// <summary>
-        /// The total number of items.
-        /// </summary>
-        public virtual int Count { get; set; }
-        /// <summary>
-        /// The maximum number of this single item.
-        /// </summary>
-        public abstract int Max { get; }
-        /// <summary>
         /// The name of the item.
         /// </summary>
         public abstract string Name { get; }
+        /// <summary>
+        /// The total number of items.
+        /// </summary>
+        public virtual int Count { get; set; }
         /// <summary>
         /// The Dictionary where the Item image could be found.
         /// </summary>
