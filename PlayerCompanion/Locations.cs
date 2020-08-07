@@ -10,6 +10,7 @@ namespace PlayerCompanion
         public static string ModWorkDir { get; } = Path.Combine(ScriptRoot, "PlayerCompanion");
         public static string InventoryData { get; } = Path.Combine(ModWorkDir, "Inventory");
         public static string Colors { get; } = Path.Combine(ModWorkDir, "Colors.json");
+        public static string Money { get; } = Path.Combine(ModWorkDir, "Money.json");
         public static string ConfigInventory { get; } = Path.Combine(ModWorkDir, "Inventory.json");
     }
 }
