@@ -1,6 +1,8 @@
 ﻿using GTA;
 using GTA.Native;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 
 namespace PlayerCompanion
 {
@@ -13,7 +15,12 @@ namespace PlayerCompanion
         /// How much ammo does this weapon has.
         /// </summary>
         [JsonProperty("ammo")]
-        public int Ammo { get; set; }
+        public int Ammo { get; set; } = 0;
+        /// <summary>
+        /// The Components or Parts of the weapon.
+        /// </summary>
+        [JsonProperty("components")]
+        public List<WeaponComponentHash> Components { get; set; } = new List<WeaponComponentHash>();
 
         /// <summary>
         /// Creates a new Weapon Information from the player.
@@ -26,6 +33,13 @@ namespace PlayerCompanion
             WeaponInfo info = new WeaponInfo();
             // And populate it
             info.Ammo = Function.Call<int>(Hash.GET_AMMO_IN_PED_WEAPON, Game.Player.Character, hash);
+            foreach (WeaponComponentHash component in Enum.GetValues(typeof(WeaponComponentHash)))
+            {
+                if (Function.Call<bool>(Hash.HAS_PED_GOT_WEAPON_COMPONENT, Game.Player.Character, hash, component))
+                {
+                    info.Components.Add(component);
+                }
+            }
             // Finally, return it
             return info;
         }

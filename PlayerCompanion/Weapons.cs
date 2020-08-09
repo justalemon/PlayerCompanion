@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Windows.Forms;
 
 namespace PlayerCompanion
 {
@@ -14,7 +13,7 @@ namespace PlayerCompanion
     {
         #region Private Fields
 
-        private static int last = 0;
+        private static Model last = 0;
         private static readonly Dictionary<Model, WeaponSet> weapons = new Dictionary<Model, WeaponSet>();
 
         #endregion

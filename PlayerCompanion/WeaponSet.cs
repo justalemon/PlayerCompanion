@@ -79,6 +79,11 @@ namespace PlayerCompanion
                 {
                     Function.Call(Hash.GIVE_WEAPON_TO_PED, Game.Player.Character, hash, info.Ammo, false, false);
                 }
+                // Then apply the components
+                foreach (WeaponComponentHash component in info.Components)
+                {
+                    Function.Call(Hash.GIVE_WEAPON_COMPONENT_TO_PED, Game.Player.Character, hash, component);
+                }
 
                 // Finally, restore the previous player weapon
                 Function.Call(Hash.SET_CURRENT_PED_WEAPON, Game.Player.Character, previous, true);
