@@ -22,6 +22,17 @@ namespace PlayerCompanion
         #region Public Property
 
         /// <summary>
+        /// If the current Ped is using a Custom money system.
+        /// </summary>
+        public static bool IsUsingCustomSystem
+        {
+            get
+            {
+                Model model = Game.Player.Character.Model;
+                return model.Hash == -1692214353 || model.Hash == 225514697 || model.Hash == -1686040670;
+            }
+        }
+        /// <summary>
         /// The Money of the current Player Ped.
         /// </summary>
         public static int PlayerMoney
@@ -89,7 +100,7 @@ namespace PlayerCompanion
                 throw new ArgumentException(nameof(model), "The Model is not a ped.");
             }
             // If the player is F, M or T, return the value of the stats
-            if (model.Hash == -1692214353 || model.Hash == 225514697 || model.Hash == -1686040670)
+            if (IsUsingCustomSystem)
             {
                 return Game.Player.Money;
             }
@@ -109,7 +120,7 @@ namespace PlayerCompanion
                 throw new ArgumentOutOfRangeException(nameof(value), "Money can't be set under zero.");
             }
             // If the player is F, M or T, save the value on the stats
-            if (model.Hash == -1692214353 || model.Hash == 225514697 || model.Hash == -1686040670)
+            if (IsUsingCustomSystem)
             {
                 Game.Player.Money = value;
             }
