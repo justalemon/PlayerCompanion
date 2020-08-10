@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Windows.Forms;
 
 namespace PlayerCompanion
 {
@@ -27,7 +28,7 @@ namespace PlayerCompanion
         /// <summary>
         /// The inventory of the current Player Ped Model.
         /// </summary>
-        public static PedInventory Current
+        public PedInventory Current
         {
             get
             {
@@ -48,7 +49,7 @@ namespace PlayerCompanion
 
         #region Constructors
 
-        internal InventoryManager()
+        internal InventoryManager(Companion companion)
         {
             // If the configuration file does exists, load it
             if (File.Exists(Locations.ConfigInventory))
@@ -65,6 +66,55 @@ namespace PlayerCompanion
                 Directory.CreateDirectory(Locations.ModWorkDir);
                 File.WriteAllText(Locations.ConfigInventory, contents);
             }
+            // Load the inventory from the current player
+            LoadInventory(configuration.SharedInventory ? new Model(0) : Game.Player.Character.Model);
+            // And add the tick for loading the current inventory
+            companion.Tick += InventoryManager_Tick;
+        }
+
+        #endregion
+
+        #region Local Events
+
+        private void InventoryManager_Tick(object sender, EventArgs e)
+        {
+            // If we are using ped-dependant inventories and the current model does not has one, load it
+            if (!configuration.SharedInventory && !inventories.ContainsKey(Game.Player.Character.Model))
+            {
+                LoadInventory(Game.Player.Character.Model);
+            }
+        }
+
+        #endregion
+
+        #region Private Functions
+
+        private PedInventory LoadInventory(Model model)
+        {
+            // Make the location of the file for the ped model
+            string file = Path.Combine(Locations.InventoryData, $"{model.Hash}.json");
+
+            // If there is none, create a new one and send it
+            if (!File.Exists(file))
+            {
+                PedInventory empty = new PedInventory(model);
+                inventories[model] = empty;
+                return empty;
+            }
+
+            // Load the contents of the file
+            string contents = File.ReadAllText(file);
+            // Try to parse it
+            List<Item> items = JsonConvert.DeserializeObject<List<Item>>(contents);
+            // If any of them are null, notify the user
+            if (items.RemoveAll(item => item == null) != 0)
+            {
+                Notification.Show("~r~Danger~s~: One of the items could not be parsed. This might represent a missing mod.");
+            }
+            // Finally, create a new inventory and save it
+            PedInventory inventory = new PedInventory(model, items.ToArray());
+            inventories[model] = inventory;
+            return inventory;
         }
 
         #endregion
@@ -103,7 +153,7 @@ namespace PlayerCompanion
         /// </summary>
         /// <param name="model">The Model of the <see cref="Ped"/>.</param>
         /// <returns>The <see cref="PedInventory"/> that contains the items of the <see cref="Ped"/> <see cref="Model"/>.</returns>
-        public static PedInventory GetInventory(Model model)
+        public PedInventory GetInventory(Model model)
         {
             // If the model is not a ped, raise an exception
             if (!model.IsPed)
@@ -116,31 +166,8 @@ namespace PlayerCompanion
             {
                 return inventories[model];
             }
-
-            // Make the location of the file for the ped model
-            string file = Path.Combine(Locations.InventoryData, $"{model.Hash}.json");
-
-            // If there is none, create a new one and send it
-            if (!File.Exists(file))
-            {
-                PedInventory empty = new PedInventory(model);
-                inventories[model] = empty;
-                return empty;
-            }
-
-            // Load the contents of the file
-            string contents = File.ReadAllText(file);
-            // Try to parse it
-            List<Item> items = JsonConvert.DeserializeObject<List<Item>>(contents);
-            // If any of them are null, notify the user
-            if (items.RemoveAll(item => item == null) != 0)
-            {
-                Notification.Show("~r~Danger~s~: One of the items could not be parsed. This might represent a missing mod.");
-            }
-            // Finally, create a new inventory and save it
-            PedInventory inventory = new PedInventory(model, items.ToArray());
-            inventories[model] = inventory;
-            return inventory;
+            // Otherwise, load it and return it
+            return LoadInventory(model);
         }
 
         #endregion

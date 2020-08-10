@@ -44,7 +44,7 @@ namespace PlayerCompanion
             }
 
             // Create the instances of the classes that we use
-            Inventory = new InventoryManager();
+            Inventory = new InventoryManager(this);
             Money = new MoneyManager(this);
             new ColorManager(this);
             new WeaponManager(this);
