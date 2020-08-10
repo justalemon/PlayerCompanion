@@ -1,4 +1,6 @@
 ﻿using GTA;
+using GTA.Native;
+using GTA.UI;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -74,12 +76,79 @@ namespace PlayerCompanion
         {
             // Get the ped model
             Model model = Game.Player.Character.Model;
+            // Make a property to check if we need to save the set
+            bool needsToBeSaved = false;
 
             // If is not the same model, load the weapons and save the hash
             if (last != model)
             {
                 LoadPedWeapons();
                 last = model;
+            }
+
+            // Get the current player Weapon Set
+            WeaponSet set = weapons[model];
+
+            // Iterate over the weapons
+            foreach (WeaponHash hash in Enum.GetValues(typeof(WeaponHash)))
+            {
+                // If this is unarmed or parachute, skip it
+                if (hash == WeaponHash.Unarmed || hash == WeaponHash.Parachute)
+                {
+                    continue;
+                }
+
+                // Check if the player has this weapon
+                bool playerHas = Function.Call<bool>(Hash.HAS_PED_GOT_WEAPON, Game.Player.Character, hash, false);
+
+                // If the player does not has the weapon but is in the inventory, delete it and continue
+                if (!playerHas && set.Weapons.ContainsKey(hash))
+                {
+                    set.Weapons.Remove(hash);
+                    needsToBeSaved = true;
+                    continue;
+                }
+                // If the player has the weapon but is not in the inventory, add it and continue
+                else if (playerHas && !set.Weapons.ContainsKey(hash))
+                {
+                    set.Weapons[hash] = WeaponInfo.FromPlayer(hash);
+                    needsToBeSaved = true;
+                    continue;
+                }
+
+                // If there is no weapon, continue
+                if (!set.Weapons.ContainsKey(hash))
+                {
+                    continue;
+                }
+                // Otherwise, get the weapon info
+                WeaponInfo info = set.Weapons[hash];
+
+                // Start checking the weapon components
+                foreach (WeaponComponentHash component in Enum.GetValues(typeof(WeaponComponentHash)))
+                {
+                    // Get the current activation of the component
+                    bool activated = Function.Call<bool>(Hash.HAS_PED_GOT_WEAPON_COMPONENT, Game.Player.Character, hash, component);
+
+                    // If is activated but not on the list, add it
+                    if (activated && !info.Components.Contains(component))
+                    {
+                        info.Components.Add(component);
+                        needsToBeSaved = true;
+                    }
+                    // If is not activated but is on the list, remove it
+                    else if (!activated && info.Components.Contains(component))
+                    {
+                        info.Components.Remove(component);
+                        needsToBeSaved = true;
+                    }
+                }
+            }
+
+            // If we need to save the weapon set, do it
+            if (needsToBeSaved)
+            {
+                set.Save();
             }
         }
 
