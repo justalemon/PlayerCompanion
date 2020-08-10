@@ -1,6 +1,5 @@
 ﻿using GTA;
 using GTA.Native;
-using GTA.UI;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -123,6 +122,14 @@ namespace PlayerCompanion
                 }
                 // Otherwise, get the weapon info
                 WeaponInfo info = set.Weapons[hash];
+
+                // Get the current ammo type and save it if is not the same
+                int ammoType = Function.Call<int>(Hash.GET_PED_AMMO_TYPE_FROM_WEAPON, Game.Player.Character, hash);
+                if (info.AmmoType != ammoType)
+                {
+                    info.AmmoType = ammoType;
+                    needsToBeSaved = true;
+                }
 
                 // Get the current tint
                 int tint = Function.Call<int>(Hash.GET_PED_WEAPON_TINT_INDEX, Game.Player.Character, hash);

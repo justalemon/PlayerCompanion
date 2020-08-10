@@ -17,6 +17,11 @@ namespace PlayerCompanion
         [JsonProperty("ammo")]
         public int Ammo { get; set; } = 0;
         /// <summary>
+        /// The type of ammo used by this weapon.
+        /// </summary>
+        [JsonProperty("ammo_type")]
+        public int AmmoType { get; set; } = 0;
+        /// <summary>
         /// The tint of the weapon.
         /// </summary>
         [JsonProperty("tint")]
@@ -38,6 +43,7 @@ namespace PlayerCompanion
             WeaponInfo info = new WeaponInfo();
             // And populate it
             info.Ammo = Function.Call<int>(Hash.GET_AMMO_IN_PED_WEAPON, Game.Player.Character, hash);
+            info.AmmoType = Function.Call<int>(Hash.GET_PED_AMMO_TYPE_FROM_WEAPON, Game.Player.Character, hash);
             info.Tint = Function.Call<int>(Hash.GET_PED_WEAPON_TINT_INDEX, Game.Player.Character, hash);
             foreach (WeaponComponentHash component in Enum.GetValues(typeof(WeaponComponentHash)))
             {
