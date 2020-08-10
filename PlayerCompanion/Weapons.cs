@@ -124,6 +124,15 @@ namespace PlayerCompanion
                 // Otherwise, get the weapon info
                 WeaponInfo info = set.Weapons[hash];
 
+                // Get the current tint
+                int tint = Function.Call<int>(Hash.GET_PED_WEAPON_TINT_INDEX, Game.Player.Character, hash);
+                // If is not the same, save it
+                if (info.Tint != tint)
+                {
+                    info.Tint = tint;
+                    needsToBeSaved = true;
+                }
+
                 // Start checking the weapon components
                 foreach (WeaponComponentHash component in Enum.GetValues(typeof(WeaponComponentHash)))
                 {

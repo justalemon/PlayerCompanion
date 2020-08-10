@@ -79,7 +79,8 @@ namespace PlayerCompanion
                 {
                     Function.Call(Hash.GIVE_WEAPON_TO_PED, Game.Player.Character, hash, info.Ammo, false, false);
                 }
-                // Then apply the components
+                // Then apply the tint and components
+                Function.Call(Hash.SET_PED_WEAPON_TINT_INDEX, Game.Player.Character, hash, info.Tint);
                 foreach (WeaponComponentHash component in info.Components)
                 {
                     Function.Call(Hash.GIVE_WEAPON_COMPONENT_TO_PED, Game.Player.Character, hash, component);
