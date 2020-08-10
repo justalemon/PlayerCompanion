@@ -11,7 +11,7 @@ namespace PlayerCompanion
     /// <summary>
     /// Manager for the Money of the peds.
     /// </summary>
-    public class Money : Script
+    public class MoneyManager
     {
         #region Private Fields
 
@@ -45,10 +45,7 @@ namespace PlayerCompanion
 
         #region Constructors
 
-        /// <summary>
-        /// Creates a new Money Script.
-        /// </summary>
-        public Money()
+        internal MoneyManager(Companion companion)
         {
             // If the money script exists, load the contents of it
             if (File.Exists(Locations.Money))
@@ -62,7 +59,7 @@ namespace PlayerCompanion
                 File.WriteAllText(Locations.Money, "{}");
             }
             // Add a tick event that shows the money
-            Tick += Money_Tick;
+            companion.Tick += Money_Tick;
         }
 
         #endregion
@@ -72,7 +69,6 @@ namespace PlayerCompanion
         private void Money_Tick(object sender, EventArgs e)
         {
             Function.Call(Hash.SHOW_HUD_COMPONENT_THIS_FRAME, 3);
-            PlayerMoney += 1;
         }
 
         #endregion

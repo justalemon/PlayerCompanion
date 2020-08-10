@@ -13,26 +13,15 @@ namespace PlayerCompanion
     /// <summary>
     /// Script that deals with the HUD Color Changes.
     /// </summary>
-    public class HUDColors : Script
+    internal class ColorManager
     {
         #region Private Fields
 
         private static readonly Model modelFranklin = "player_one";
         private static readonly Model modelTrevor = "player_two";
         private static readonly Model modelMichael = "player_zero";
-
-        #endregion
-
-        #region Public Properties
-
-        /// <summary>
-        /// The last known Player Ped Model.
-        /// </summary>
-        public static Model LastModel { get; private set; } = null;
-        /// <summary>
-        /// The different patched colors for the ped models.
-        /// </summary>
-        public static Dictionary<int, Color> Colors { get; private set; } = new Dictionary<int, Color>();
+        private static Model last = null;
+        private static Dictionary<int, Color> colors = new Dictionary<int, Color>();
 
         #endregion
 
@@ -41,13 +30,13 @@ namespace PlayerCompanion
         /// <summary>
         /// Creates a new class that changes the HUD Colors.
         /// </summary>
-        public HUDColors()
+        internal ColorManager(Companion companion)
         {
             // If the file with colors exists, load it
             if (File.Exists(Locations.Colors))
             {
                 string contents = File.ReadAllText(Locations.Colors);
-                Colors = JsonConvert.DeserializeObject<Dictionary<int, Color>>(contents, new ColorConverter());
+                colors = JsonConvert.DeserializeObject<Dictionary<int, Color>>(contents, new ColorConverter());
             }
             // Otherwise, write an empty dictionary
             else
@@ -56,8 +45,8 @@ namespace PlayerCompanion
             }
 
             // And add the Tick and Aborted events
-            Tick += HUDColors_Tick;
-            Aborted += HUDColors_Aborted;
+            companion.Tick += HUDColors_Tick;
+            companion.Aborted += HUDColors_Aborted;
         }
 
         #endregion
@@ -86,7 +75,7 @@ namespace PlayerCompanion
             Model model = Game.Player.Character.Model;
 
             // If the last ped model is different, change the color
-            if (LastModel != model)
+            if (last != model)
             {
                 // If is Michael, Franklin or Trevor, restore it to default
                 if (model == modelFranklin || model == modelTrevor || model == modelMichael)
@@ -94,9 +83,9 @@ namespace PlayerCompanion
                     RestoreColors();
                 }
                 // Otherwise, set the colors to the one loaded (if any)
-                else if (Colors.ContainsKey(model))
+                else if (colors.ContainsKey(model))
                 {
-                    Color color = Colors[model];
+                    Color color = colors[model];
                     // Light
                     Function.Call(Hash.REPLACE_HUD_COLOUR_WITH_RGBA, 143, (int)color.R, (int)color.G, (int)color.B, (int)color.A); // M
                     Function.Call(Hash.REPLACE_HUD_COLOUR_WITH_RGBA, 144, (int)color.R, (int)color.G, (int)color.B, (int)color.A); // F
@@ -122,7 +111,7 @@ namespace PlayerCompanion
                 }
 
                 // Finally, save the model
-                LastModel = model;
+                last = model;
             }
         }
 

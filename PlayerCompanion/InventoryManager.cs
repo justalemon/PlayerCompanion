@@ -9,36 +9,30 @@ using System.Reflection;
 namespace PlayerCompanion
 {
     /// <summary>
-    /// Script that handles the player inventory.
+    /// Handler for the Inventory of Player Peds.
     /// </summary>
-    public class Inventory : Script
+    public class InventoryManager
     {
         #region Private Fields
 
         private static readonly Dictionary<Model, PedInventory> inventories = new Dictionary<Model, PedInventory>();
         private static readonly List<Assembly> completed = new List<Assembly>();
+        private static readonly List<Type> nonUnique = new List<Type>();
+        internal static InventoryConfiguration configuration = null;
 
         #endregion
 
         #region Public Properties
 
         /// <summary>
-        /// If the inventory is ready to work.
-        /// </summary>
-        public static bool Ready { get; private set; } = false;
-        /// <summary>
-        /// The configuration of the inventory.
-        /// </summary>
-        public static InventoryConfiguration Configuration { get; private set; } = null;
-        /// <summary>
-        /// The inventory of the current Ped Model.
+        /// The inventory of the current Player Ped Model.
         /// </summary>
         public static PedInventory Current
         {
             get
             {
                 // If the inventory is shared across all peds, return the generic inventory
-                if (Configuration.SharedInventory)
+                if (configuration.SharedInventory)
                 {
                     return GetInventory(0);
                 }
@@ -49,36 +43,28 @@ namespace PlayerCompanion
                 }
             }
         }
-        /// <summary>
-        /// Non unique items that can be given randomly.
-        /// </summary>
-        public static List<Type> NonUniqueItems { get; } = new List<Type>();
 
         #endregion
 
         #region Constructors
 
-        /// <summary>
-        /// Creates a new Inventory Script.
-        /// </summary>
-        public Inventory()
+        internal InventoryManager()
         {
             // If the configuration file does exists, load it
             if (File.Exists(Locations.ConfigInventory))
             {
                 string contents = File.ReadAllText(Locations.ConfigInventory);
-                Configuration = JsonConvert.DeserializeObject<InventoryConfiguration>(contents);
+                configuration = JsonConvert.DeserializeObject<InventoryConfiguration>(contents);
 
             }
             // Otherwise, create a new one and save it
             else
             {
-                Configuration = new InventoryConfiguration();
-                SaveConfiguration();
+                configuration = new InventoryConfiguration();
+                string contents = JsonConvert.SerializeObject(configuration);
+                Directory.CreateDirectory(Locations.ModWorkDir);
+                File.WriteAllText(Locations.ConfigInventory, contents);
             }
-
-            // Finally, say that we are ready to work
-            Ready = true;
         }
 
         #endregion
@@ -105,24 +91,12 @@ namespace PlayerCompanion
                 // If the type is a class and is not unique, add it to the list to be given randomly
                 if (type.GetTypeInfo().IsClass && Attribute.GetCustomAttribute(type, typeof(InventoryUniqueAttribute)) == null)
                 {
-                    NonUniqueItems.Add(type);
+                    nonUnique.Add(type);
                 }
             }
 
             // Finally, mark the class initialization as complete
             completed.Add(assembly);
-        }
-        /// <summary>
-        /// Saves the configuration of the inventory.
-        /// </summary>
-        public static void SaveConfiguration()
-        {
-            // Dump the contents to a JSON String
-            string contents = JsonConvert.SerializeObject(Configuration);
-            // Create the folder (if there is none)
-            Directory.CreateDirectory(Locations.ModWorkDir);
-            // And dumps the contents of the file
-            File.WriteAllText(Locations.ConfigInventory, contents);
         }
         /// <summary>
         /// Gets the Inventory of a specific <see cref="Ped"/> <see cref="Model"/>.

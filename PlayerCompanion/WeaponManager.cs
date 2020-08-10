@@ -10,7 +10,7 @@ namespace PlayerCompanion
     /// <summary>
     /// Weapon Manager and Stash.
     /// </summary>
-    public class Weapons : Script
+    internal class WeaponManager
     {
         #region Private Fields
 
@@ -21,13 +21,9 @@ namespace PlayerCompanion
 
         #region Constructors
 
-        /// <summary>
-        /// Creates a new Weapon Stash Script.
-        /// </summary>
-        public Weapons()
+        internal WeaponManager(Companion companion)
         {
-            // Finally, add the events
-            Tick += Weapons_Tick;
+            companion.Tick += Weapons_Tick;
         }
 
         #endregion
