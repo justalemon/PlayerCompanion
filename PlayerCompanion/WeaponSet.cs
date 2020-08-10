@@ -23,7 +23,7 @@ namespace PlayerCompanion
         /// The weapons that are part of this set.
         /// </summary>
         [JsonProperty("weapons")]
-        public Dictionary<int, WeaponInfo> Weapons { get; set; } = new Dictionary<int, WeaponInfo>();
+        public Dictionary<WeaponHash, WeaponInfo> Weapons { get; set; } = new Dictionary<WeaponHash, WeaponInfo>();
 
         #endregion
 
@@ -49,7 +49,7 @@ namespace PlayerCompanion
                 // Otherwise, add it if is present
                 if (Function.Call<bool>(Hash.HAS_PED_GOT_WEAPON, Game.Player.Character, hash, false))
                 {
-                    set.Weapons[(int)hash] = WeaponInfo.FromPlayer(hash);
+                    set.Weapons[hash] = WeaponInfo.FromPlayer(hash);
                 }
             }
             return set;
@@ -63,13 +63,13 @@ namespace PlayerCompanion
             foreach (WeaponHash hash in Enum.GetValues(typeof(WeaponHash)))
             {
                 // If the weapon is not on the inventory, continue
-                if (!Weapons.ContainsKey((int)hash))
+                if (!Weapons.ContainsKey(hash))
                 {
                     continue;
                 }
 
                 // Get the weapon information and current weapon
-                WeaponInfo info = Weapons[(int)hash];
+                WeaponInfo info = Weapons[hash];
                 OutputArgument argument = new OutputArgument();
                 Function.Call(Hash.GET_CURRENT_PED_WEAPON, Game.Player.Character, argument, true);
                 WeaponHash previous = argument.GetResult<WeaponHash>();
@@ -94,7 +94,7 @@ namespace PlayerCompanion
         /// </summary>
         public void Save()
         {
-            string path = Path.Combine(Locations.WeaponData, $"{Owner}.json");
+            string path = Path.Combine(Locations.WeaponData, $"{Owner.Hash}.json");
             string contents = JsonConvert.SerializeObject(this);
             File.WriteAllText(path, contents);
         }
