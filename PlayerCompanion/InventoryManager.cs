@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Windows.Forms;
 
 namespace PlayerCompanion
 {
@@ -35,13 +34,42 @@ namespace PlayerCompanion
                 // If the inventory is shared across all peds, return the generic inventory
                 if (configuration.SharedInventory)
                 {
-                    return GetInventory(0);
+                    return this[0];
                 }
                 // Otherwise, return the inventory for the specific ped model
                 else
                 {
-                    return GetInventory(Game.Player.Character.Model);
+                    return this[Game.Player.Character.Model];
                 }
+            }
+        }
+
+        #endregion
+
+        #region Indexers
+
+        /// <summary>
+        /// Gets the Inventory of a specific <see cref="Ped"/> <see cref="Model"/>.
+        /// </summary>
+        /// <param name="model">The Model of the <see cref="Ped"/>.</param>
+        /// <returns>The <see cref="PedInventory"/> that contains the Items of the <see cref="Ped"/> <see cref="Model"/>.</returns>
+        public PedInventory this[Model model]
+        {
+            get
+            {
+                // If the model is not a ped, raise an exception
+                if (!model.IsPed)
+                {
+                    throw new InvalidOperationException("Model is not a Ped or is not present in the game files.");
+                }
+
+                // If there is an inventory in the dictionary, return it
+                if (inventories.ContainsKey(model))
+                {
+                    return inventories[model];
+                }
+                // Otherwise, load it and return it
+                return LoadInventory(model);
             }
         }
 
@@ -147,27 +175,6 @@ namespace PlayerCompanion
 
             // Finally, mark the class initialization as complete
             completed.Add(assembly);
-        }
-        /// <summary>
-        /// Gets the Inventory of a specific <see cref="Ped"/> <see cref="Model"/>.
-        /// </summary>
-        /// <param name="model">The Model of the <see cref="Ped"/>.</param>
-        /// <returns>The <see cref="PedInventory"/> that contains the items of the <see cref="Ped"/> <see cref="Model"/>.</returns>
-        public PedInventory GetInventory(Model model)
-        {
-            // If the model is not a ped, raise an exception
-            if (!model.IsPed)
-            {
-                throw new InvalidOperationException("Model is not a Ped or is not present in the game files.");
-            }
-
-            // If there is an inventory in the dictionary, return it
-            if (inventories.ContainsKey(model))
-            {
-                return inventories[model];
-            }
-            // Otherwise, load it and return it
-            return LoadInventory(model);
         }
 
         #endregion
