@@ -100,6 +100,98 @@ namespace PlayerCompanion
             string contents = JsonConvert.SerializeObject(this);
             File.WriteAllText(path, contents);
         }
+        /// <summary>
+        /// Updates the values on the Weapon Set.
+        /// </summary>
+        /// <returns><see langword="true"/> if changes were made, <see langword="false"/> otherwise.</returns>
+        public bool Update()
+        {
+            // Have a place to store the check of changes
+            bool modified = false;
+
+            // Iterate over the weapons
+            foreach (WeaponHash hash in Enum.GetValues(typeof(WeaponHash)))
+            {
+                // If this is unarmed or parachute, skip it
+                if (hash == WeaponHash.Unarmed || hash == WeaponHash.Parachute)
+                {
+                    continue;
+                }
+
+                // Check if the player has this weapon
+                bool playerHas = Function.Call<bool>(Hash.HAS_PED_GOT_WEAPON, Game.Player.Character, hash, false);
+
+                // If the player does not has the weapon but is in the inventory, delete it and continue
+                if (!playerHas && Weapons.ContainsKey(hash))
+                {
+                    Weapons.Remove(hash);
+                    modified = true;
+                    continue;
+                }
+                // If the player has the weapon but is not in the inventory, add it and continue
+                else if (playerHas && !Weapons.ContainsKey(hash))
+                {
+                    Weapons[hash] = WeaponInfo.FromPlayer(hash);
+                    modified = true;
+                    continue;
+                }
+
+                // If there is no weapon, continue
+                if (!Weapons.ContainsKey(hash))
+                {
+                    continue;
+                }
+                // Otherwise, get the weapon info
+                WeaponInfo info = Weapons[hash];
+
+                // Save the total ammo
+                int ammo = Function.Call<int>(Hash.GET_AMMO_IN_PED_WEAPON, Game.Player.Character, hash);
+                if (info.Ammo != ammo)
+                {
+                    info.Ammo = ammo;
+                }
+
+                // Get the current ammo type and save it if is not the same
+                int ammoType = Function.Call<int>(Hash.GET_PED_AMMO_TYPE_FROM_WEAPON, Game.Player.Character, hash);
+                if (info.AmmoType != ammoType)
+                {
+                    info.AmmoType = ammoType;
+                    modified = true;
+                }
+
+                // Get the current tint
+                int tint = Function.Call<int>(Hash.GET_PED_WEAPON_TINT_INDEX, Game.Player.Character, hash);
+                // If is not the same, save it
+                if (info.Tint != tint)
+                {
+                    info.Tint = tint;
+                    modified = true;
+                }
+
+                // Start checking the weapon components
+                foreach (WeaponComponentHash component in Enum.GetValues(typeof(WeaponComponentHash)))
+                {
+                    // Get the current activation of the component
+                    bool activated = Function.Call<bool>(Hash.HAS_PED_GOT_WEAPON_COMPONENT, Game.Player.Character, hash, component);
+
+                    // If is activated but not on the list, add it
+                    if (activated && !info.Components.Contains(component))
+                    {
+                        info.Components.Add(component);
+                        modified = true;
+                    }
+                    // If is not activated but is on the list, remove it
+                    else if (!activated && info.Components.Contains(component))
+                    {
+                        info.Components.Remove(component);
+                        modified = true;
+                    }
+                }
+            }
+
+            // Finally, return the modification status
+            return modified;
+        }
 
         #endregion
     }
