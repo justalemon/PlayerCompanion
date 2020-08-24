@@ -18,7 +18,6 @@ namespace PlayerCompanion
         private static readonly Dictionary<Model, PedInventory> inventories = new Dictionary<Model, PedInventory>();
         private static readonly List<Assembly> completed = new List<Assembly>();
         private static readonly List<Type> nonUnique = new List<Type>();
-        internal static InventoryConfiguration configuration = null;
 
         #endregion
 
@@ -32,7 +31,7 @@ namespace PlayerCompanion
             get
             {
                 // If the inventory is shared across all peds, return the generic inventory
-                if (configuration.SharedInventory)
+                if (Companion.Config.SharedInventory)
                 {
                     return this[0];
                 }
@@ -79,23 +78,8 @@ namespace PlayerCompanion
 
         internal InventoryManager(Companion companion)
         {
-            // If the configuration file does exists, load it
-            if (File.Exists(Locations.ConfigInventory))
-            {
-                string contents = File.ReadAllText(Locations.ConfigInventory);
-                configuration = JsonConvert.DeserializeObject<InventoryConfiguration>(contents);
-
-            }
-            // Otherwise, create a new one and save it
-            else
-            {
-                configuration = new InventoryConfiguration();
-                string contents = JsonConvert.SerializeObject(configuration);
-                Directory.CreateDirectory(Locations.ModWorkDir);
-                File.WriteAllText(Locations.ConfigInventory, contents);
-            }
             // Load the inventory from the current player
-            LoadInventory(configuration.SharedInventory ? new Model(0) : Game.Player.Character.Model);
+            LoadInventory(Companion.Config.SharedInventory ? new Model(0) : Game.Player.Character.Model);
             // And add the tick for loading the current inventory
             companion.Tick += InventoryManager_Tick;
         }
@@ -107,7 +91,7 @@ namespace PlayerCompanion
         private void InventoryManager_Tick(object sender, EventArgs e)
         {
             // If we are using ped-dependant inventories and the current model does not has one, load it
-            if (!configuration.SharedInventory && !inventories.ContainsKey(Game.Player.Character.Model))
+            if (!Companion.Config.SharedInventory && !inventories.ContainsKey(Game.Player.Character.Model))
             {
                 LoadInventory(Game.Player.Character.Model);
             }

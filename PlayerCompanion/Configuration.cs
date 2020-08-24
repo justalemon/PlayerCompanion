@@ -5,7 +5,7 @@ namespace PlayerCompanion
     /// <summary>
     /// The configuration of the mod.
     /// </summary>
-    public class InventoryConfiguration
+    public class Configuration
     {
         /// <summary>
         /// If the LemonUI Menu should be used to navigate the inventory items.

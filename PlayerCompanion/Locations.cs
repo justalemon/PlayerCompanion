@@ -12,6 +12,6 @@ namespace PlayerCompanion
         public static string WeaponData { get; } = Path.Combine(ModWorkDir, "Weapons");
         public static string Colors { get; } = Path.Combine(ModWorkDir, "Colors.json");
         public static string Money { get; } = Path.Combine(ModWorkDir, "Money.json");
-        public static string ConfigInventory { get; } = Path.Combine(ModWorkDir, "Inventory.json");
+        public static string Config { get; } = Path.Combine(ModWorkDir, "Config.json");
     }
 }
