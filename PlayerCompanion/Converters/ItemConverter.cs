@@ -39,7 +39,7 @@ namespace PlayerCompanion.Converters
             }
 
             // Create the item with the specified class
-            Item item = (Item)Activator.CreateInstance(type, (int)@object["count"]);
+            Item item = (Item)Activator.CreateInstance(type);
 
             // If the item inherits from the stackable class, store the number of items
             if (item is StackableItem stackableItem)
