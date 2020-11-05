@@ -17,7 +17,7 @@ namespace PlayerCompanion
         /// <summary>
         /// If the Companion Features are ready to work.
         /// </summary>
-        public static bool Ready { get; private set; } = false;
+        public static bool IsReady { get; private set; } = false;
         /// <summary>
         /// The configuration of the mod.
         /// </summary>
@@ -72,7 +72,7 @@ namespace PlayerCompanion
             new WeaponManager(this);
 
             // Finally, mark the script as ready
-            Ready = true;
+            IsReady = true;
         }
 
         #endregion
