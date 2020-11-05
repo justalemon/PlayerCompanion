@@ -5,7 +5,22 @@ using PlayerCompanion.Converters;
 namespace PlayerCompanion
 {
     /// <summary>
-    /// Represents an item that can be added to the inventory.
+    /// Represents an inventory item that can be stored in stacks (like Minecraft).
+    /// </summary>
+    public abstract class StackableItem : Item
+    {
+        /// <summary>
+        /// The total number of items in this Stack.
+        /// </summary>
+        public virtual int Count { get; set; }
+        /// <summary>
+        /// The maximum number of items that can be stored in a Stack.
+        /// </summary>
+        public virtual int Maximum { get; }
+    }
+
+    /// <summary>
+    /// Represents a single Inventory Item.
     /// </summary>}
     [JsonConverter(typeof(ItemConverter))]
     public abstract class Item
@@ -17,30 +32,13 @@ namespace PlayerCompanion
         /// </summary>
         public abstract string Name { get; }
         /// <summary>
-        /// A custom Sprite used as an icon for the item.
+        /// A custom white Sprite used as an icon for the item.
         /// </summary>
         public abstract ScaledTexture Icon { get; set; }
         /// <summary>
         /// The Monetary value of this item.
         /// </summary>
         public abstract int Value { get; }
-        /// <summary>
-        /// The total number of items.
-        /// </summary>
-        public virtual int Count { get; set; }
-
-        #endregion
-
-        #region Constructor
-
-        /// <summary>
-        /// Creates a new <see cref="Item"/> with a specific count.
-        /// </summary>
-        /// <param name="count">The total number of this <see cref="Item"/>.</param>
-        public Item(int count)
-        {
-            Count = count;
-        }
 
         #endregion
     }
