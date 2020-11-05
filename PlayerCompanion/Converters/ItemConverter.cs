@@ -14,7 +14,7 @@ namespace PlayerCompanion.Converters
         /// <summary>
         /// Reads an <see cref="Item"/>.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The restored <see cref="Item"/>.</returns>
         public override Item ReadJson(JsonReader reader, Type objectType, Item existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
             // Load the entire thing into a JSON Object
@@ -26,8 +26,8 @@ namespace PlayerCompanion.Converters
                 throw new KeyNotFoundException("There was no Type specified in the class.");
             }
 
-            // Get the count of this item
-            int count = @object.ContainsKey("count") ? (int)@object["count"] : 0;
+            // Get the total number of items
+            int count = @object.ContainsKey("count") ? (int)@object["count"] : 1;
 
             // Try to get the type of the object
             Type type = Type.GetType((string)@object["type"], false);
@@ -37,8 +37,18 @@ namespace PlayerCompanion.Converters
                 Notification.Show($"~r~Danger~s~: {(string)@object["type"]} was not found. Make sure that all of the required mods are installed and try again.");
                 return new InvalidItem((string)@object["type"], count);
             }
-            // Otherwise, create a new instance and return a generic inventory item
-            return (Item)Activator.CreateInstance(type, (int)@object["count"]);
+
+            // Create the item with the specified class
+            Item item = (Item)Activator.CreateInstance(type, (int)@object["count"]);
+
+            // If the item inherits from the stackable class, store the number of items
+            if (item is StackableItem stackableItem)
+            {
+                stackableItem.Count = count;
+            }
+            
+            // Finally, return the item that we just created
+            return item;
         }
         /// <summary>
         /// Writes an <see cref="Item"/>.
@@ -47,6 +57,7 @@ namespace PlayerCompanion.Converters
         {
             // Create a new JObject to store the values
             JObject @object = new JObject();
+
             // If this is an invalid item, save the type in the property
             if (value is InvalidItem invalid)
             {
@@ -57,8 +68,13 @@ namespace PlayerCompanion.Converters
             {
                 @object["type"] = value.GetType().ToString();
             }
-            // Store the total count of this item
-            @object["count"] = value.Count;
+
+            // If the item type inherits from stackable, save the count
+            if (value is StackableItem stackable)
+            {
+                @object["count"] = stackable.Count;
+            }
+
             // And save it
             @object.WriteTo(writer);
         }
