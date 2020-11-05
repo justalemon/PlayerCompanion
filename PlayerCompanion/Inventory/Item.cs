@@ -32,9 +32,9 @@ namespace PlayerCompanion
         /// </summary>
         public virtual bool HasImage => false;
         /// <summary>
-        /// The Price of this item on in game money.
+        /// The Monetary value of this item.
         /// </summary>
-        public abstract int Price { get; }
+        public abstract int Value { get; }
 
         #endregion
 
