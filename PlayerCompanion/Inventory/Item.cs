@@ -28,9 +28,13 @@ namespace PlayerCompanion
         #region Public Properties
 
         /// <summary>
-        /// The name of the item.
+        /// The name of the item shown on specific inventory interfaces.
         /// </summary>
         public abstract string Name { get; }
+        /// <summary>
+        /// The description of the name shown on specific inventory interfaces.
+        /// </summary>
+        public virtual string Description => "No Description Available.";
         /// <summary>
         /// A custom white Sprite used as an icon for the item.
         /// </summary>
