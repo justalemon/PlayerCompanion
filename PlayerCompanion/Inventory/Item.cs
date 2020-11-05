@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using LemonUI.Elements;
+using Newtonsoft.Json;
 using PlayerCompanion.Converters;
 
 namespace PlayerCompanion
@@ -16,25 +17,17 @@ namespace PlayerCompanion
         /// </summary>
         public abstract string Name { get; }
         /// <summary>
-        /// The total number of items.
+        /// A custom Sprite used as an icon for the item.
         /// </summary>
-        public virtual int Count { get; set; }
-        /// <summary>
-        /// The Dictionary where the Item image could be found.
-        /// </summary>
-        public virtual string ImageDictionary => "";
-        /// <summary>
-        /// The Sprite of the Item image.
-        /// </summary>
-        public virtual string ImageSprite => "";
-        /// <summary>
-        /// If this inventory item has a valid image to use.
-        /// </summary>
-        public virtual bool HasImage => false;
+        public abstract ScaledTexture Icon { get; set; }
         /// <summary>
         /// The Monetary value of this item.
         /// </summary>
         public abstract int Value { get; }
+        /// <summary>
+        /// The total number of items.
+        /// </summary>
+        public virtual int Count { get; set; }
 
         #endregion
 
