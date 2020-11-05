@@ -42,7 +42,7 @@ namespace PlayerCompanion
         /// <summary>
         /// The Monetary value of this item.
         /// </summary>
-        public abstract int Value { get; }
+        public virtual int Value => 0;
 
         #endregion
     }
