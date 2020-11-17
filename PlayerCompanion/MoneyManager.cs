@@ -99,9 +99,7 @@ namespace PlayerCompanion
         /// </summary>
         internal void Save()
         {
-            // Make sure that the working directory exists
             Directory.CreateDirectory(Companion.location);
-            // And write the contents
             File.WriteAllText(Path.Combine(Companion.location, "Money.json"), JsonConvert.SerializeObject(moneyValues));
         }
 

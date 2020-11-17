@@ -28,6 +28,10 @@ namespace PlayerCompanion
         /// The manager for the Player Money.
         /// </summary>
         public static MoneyManager Money { get; private set; } = new MoneyManager();
+        /// <summary>
+        /// Manages the colors in the HUD and Radar.
+        /// </summary>
+        public static ColorManager Colors { get; private set; } = new ColorManager();
 
         #endregion
 
