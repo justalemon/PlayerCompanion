@@ -35,7 +35,7 @@ namespace PlayerCompanion
             // If the type was not found, return an invalid type
             if (type == null)
             {
-                Notification.Show($"~r~Danger~s~: {(string)@object["type"]} was not found. Make sure that all of the required mods are installed and try again.");
+                Notification.Show($"~o~Warning~s~: Item Type {(string)@object["type"]} was not found. Make sure that all of the required mods are installed and reload PlayerCompanion.");
                 return new InvalidItem((string)@object["type"], count);
             }
 
