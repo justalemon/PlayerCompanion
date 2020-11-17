@@ -58,7 +58,7 @@ namespace PlayerCompanion
                 File.WriteAllText(Locations.Money, "{}");
             }
             // Add a tick event that shows the money
-            companion.Tick += Money_Tick;
+            //companion.Tick += Money_Tick;
         }
 
         #endregion

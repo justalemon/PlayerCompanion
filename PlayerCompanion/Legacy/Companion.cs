@@ -9,7 +9,7 @@ namespace PlayerCompanion
     /// <summary>
     /// Game Script that handles the Companion Processing.
     /// </summary>
-    public class Companion : Script
+    public class Companion
     {
 
         #region Public Properties
@@ -21,7 +21,7 @@ namespace PlayerCompanion
         /// <summary>
         /// The configuration of the mod.
         /// </summary>
-        public static Configuration Config { get; set; } = null;
+        public static Configuration Config { get; private set; } = null;
         /// <summary>
         /// The Inventory of the Player.
         /// </summary>

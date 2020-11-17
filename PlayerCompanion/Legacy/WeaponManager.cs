@@ -23,7 +23,7 @@ namespace PlayerCompanion
 
         internal WeaponManager(Companion companion)
         {
-            companion.Tick += Weapons_Tick;
+            //companion.Tick += Weapons_Tick;
         }
 
         #endregion

@@ -81,7 +81,7 @@ namespace PlayerCompanion
             // Load the inventory from the current player
             LoadInventory(Companion.Config.SharedInventory ? new Model(0) : Game.Player.Character.Model);
             // And add the tick for loading the current inventory
-            companion.Tick += InventoryManager_Tick;
+            //companion.Tick += InventoryManager_Tick;
         }
 
         #endregion

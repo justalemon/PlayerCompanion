@@ -45,8 +45,8 @@ namespace PlayerCompanion
             }
 
             // And add the Tick and Aborted events
-            companion.Tick += HUDColors_Tick;
-            companion.Aborted += HUDColors_Aborted;
+            //companion.Tick += HUDColors_Tick;
+            //companion.Aborted += HUDColors_Aborted;
         }
 
         #endregion

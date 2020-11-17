@@ -10,7 +10,7 @@ namespace PlayerCompanion
     /// <summary>
     /// The script used to process the menus.
     /// </summary>
-    public class Menus : Script
+    public class Menus
     {
         #region Public Properties
 
@@ -40,8 +40,8 @@ namespace PlayerCompanion
             // Add the menus to the pool
             Pool.Add(Inventory);
             // And add the events
-            Tick += Menus_Tick;
-            KeyDown += Menus_KeyDown;
+            //Tick += Menus_Tick;
+            //KeyDown += Menus_KeyDown;
         }
 
         #endregion
