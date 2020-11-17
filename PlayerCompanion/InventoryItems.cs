@@ -1,10 +1,11 @@
 ﻿using GTA.UI;
+using LemonUI.Elements;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 
-namespace PlayerCompanion.Converters
+namespace PlayerCompanion
 {
     /// <summary>
     /// Serializes and Deserializes inventory items.
@@ -46,7 +47,7 @@ namespace PlayerCompanion.Converters
             {
                 stackableItem.Count = count;
             }
-            
+
             // Finally, return the item that we just created
             return item;
         }
@@ -78,5 +79,86 @@ namespace PlayerCompanion.Converters
             // And save it
             @object.WriteTo(writer);
         }
+    }
+
+    /// <summary>
+    /// Represents an inventory item that can be stored in stacks (like Minecraft).
+    /// </summary>
+    public abstract class StackableItem : Item
+    {
+        /// <summary>
+        /// The total number of items in this Stack.
+        /// </summary>
+        public virtual int Count { get; set; }
+        /// <summary>
+        /// The maximum number of items that can be stored in a Stack.
+        /// </summary>
+        public virtual int Maximum { get; }
+    }
+
+    /// <summary>
+    /// Represents a single Inventory Item.
+    /// </summary>}
+    [JsonConverter(typeof(ItemConverter))]
+    public abstract class Item
+    {
+        #region Public Properties
+
+        /// <summary>
+        /// The name of the item shown on specific inventory interfaces.
+        /// </summary>
+        public abstract string Name { get; }
+        /// <summary>
+        /// The description of the name shown on specific inventory interfaces.
+        /// </summary>
+        public virtual string Description => "No Description Available.";
+        /// <summary>
+        /// A custom white Sprite used as an icon for the item.
+        /// </summary>
+        public abstract ScaledTexture Icon { get; set; }
+        /// <summary>
+        /// The Monetary value of this item.
+        /// </summary>
+        public virtual int Value => 0;
+
+        #endregion
+    }
+
+    /// <summary>
+    /// Represents an Item that could not be restored when the script was loaded.
+    /// </summary>
+    public sealed class InvalidItem : StackableItem
+    {
+        #region Properties
+
+        /// <summary>
+        /// The Name of this Invalid Item.
+        /// </summary>
+        public override string Name { get; }
+        /// <summary>
+        /// The Price of this Invalid Item.
+        /// </summary>
+        public override int Value { get; } = 0;
+        /// <summary>
+        /// The Type that could not be created during initialization.
+        /// </summary>
+        public string Type { get; }
+        /// <summary>
+        /// The icon of the invalid item.
+        /// </summary>
+        public override ScaledTexture Icon { get; set; } = new ScaledTexture("timerbar_icons", "pickup_random");
+
+        #endregion
+
+        #region Constructor
+
+        internal InvalidItem(string type, int count)
+        {
+            Name = $"Invalid ({type})";
+            Type = type;
+            Count = count;
+        }
+
+        #endregion
     }
 }

@@ -34,6 +34,10 @@ namespace PlayerCompanion
         /// Manages the colors in the HUD and Radar.
         /// </summary>
         public static ColorManager Colors { get; private set; } = new ColorManager();
+        /// <summary>
+        /// Makages the Inventories of the Players
+        /// </summary>
+        public static InventoryManager Inventories { get; private set; } = new InventoryManager();
 
         #endregion
 
@@ -86,6 +90,8 @@ namespace PlayerCompanion
                 {
                     Colors.Apply(Colors.Current);
                 }
+                Inventories.Load(Game.Player.Character.Model);
+                Inventories.Load(Game.Player.Character.Model);
                 lastModel = Game.Player.Character.Model;
             }
         }
