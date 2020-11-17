@@ -13,6 +13,8 @@ namespace PlayerCompanion
     {
         #region 
 
+        private static Model lastModel = Game.Player.Character.Model;
+
         internal static string location = Path.Combine(new Uri(Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase)).LocalPath, "PlayerCompanion");
         internal static Configuration config = null;
 
@@ -65,6 +67,33 @@ namespace PlayerCompanion
                 Directory.CreateDirectory(location);
                 File.WriteAllText(Path.Combine(), JsonConvert.SerializeObject(config));
             }
+
+            // Finally, add the events that we need
+            Tick += Companion_Tick;
+            Aborted += Companion_Aborted;
+        }
+
+        #endregion
+
+        #region Events
+
+        private void Companion_Tick(object sender, EventArgs e)
+        {
+            // If the Player Ped Model has been changed, make the required updates
+            if (Game.Player.Character.Model != lastModel)
+            {
+                if (Colors.HasCustomColor(Game.Player.Character.Model))
+                {
+                    Colors.Apply(Colors.Current);
+                }
+                lastModel = Game.Player.Character.Model;
+            }
+        }
+
+        private void Companion_Aborted(object sender, EventArgs e)
+        {
+            // Do the required cleanup tasks
+            Colors.RestoreDefault();
         }
 
         #endregion
