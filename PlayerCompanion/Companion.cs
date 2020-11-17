@@ -24,6 +24,10 @@ namespace PlayerCompanion
         /// If the PlayerCompanion features are ready to be used.
         /// </summary>
         public static bool IsReady { get; private set; } = false;
+        /// <summary>
+        /// The manager for the Player Money.
+        /// </summary>
+        public static MoneyManager Money { get; private set; } = new MoneyManager();
 
         #endregion
 
