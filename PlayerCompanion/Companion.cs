@@ -83,6 +83,13 @@ namespace PlayerCompanion
 
         private void Companion_Tick(object sender, EventArgs e)
         {
+            // If PlayerCompanion is not ready to work, perform the initialization
+            if (!IsReady)
+            {
+                Inventories.Load(Game.Player.Character.Model);
+                IsReady = true;
+            }
+
             // If the Player Ped Model has been changed, make the required updates
             if (Game.Player.Character.Model != lastModel)
             {
@@ -90,7 +97,6 @@ namespace PlayerCompanion
                 {
                     Colors.Apply(Colors.Current);
                 }
-                Inventories.Load(Game.Player.Character.Model);
                 Inventories.Load(Game.Player.Character.Model);
                 lastModel = Game.Player.Character.Model;
             }
