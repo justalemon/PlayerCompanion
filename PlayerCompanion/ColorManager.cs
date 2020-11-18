@@ -54,7 +54,7 @@ namespace PlayerCompanion
         private readonly Color colorM = Color.FromArgb(255, 101, 180, 212);
         private readonly Color colorF = Color.FromArgb(255, 171, 237, 171);
         private readonly Color colorT = Color.FromArgb(255, 255, 163, 87);
-        private readonly Dictionary<int, Color> colors = new Dictionary<int, Color>();
+        private readonly Dictionary<Model, Color> colors = new Dictionary<Model, Color>();
 
         #endregion
 
@@ -122,7 +122,20 @@ namespace PlayerCompanion
                 string contents = File.ReadAllText(file);
                 try
                 {
-                    colors = JsonConvert.DeserializeObject<Dictionary<int, Color>>(contents, new ColorConverter());
+                    Dictionary<string, Color> values = JsonConvert.DeserializeObject<Dictionary<string, Color>>(contents, new ColorConverter());
+                    foreach (KeyValuePair<string, Color> pair in values)
+                    {
+                        Model model;
+                        if (int.TryParse(pair.Key, out int number))
+                        {
+                            model = new Model(number);
+                        }
+                        else
+                        {
+                            model = new Model(pair.Key);
+                        }
+                        colors[model] = pair.Value;
+                    }
                 }
                 catch (JsonSerializationException e)
                 {
