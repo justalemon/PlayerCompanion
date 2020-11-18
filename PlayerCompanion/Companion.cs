@@ -16,6 +16,8 @@ namespace PlayerCompanion
         #region 
 
         private static Model lastModel = default;
+        private static int nextWeaponUpdate = 0;
+        private static int nextWeaponSave = 0;
 
         internal static string location = Path.Combine(new Uri(Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase)).LocalPath, "PlayerCompanion");
         internal static Configuration config = null; 
@@ -37,9 +39,13 @@ namespace PlayerCompanion
         /// </summary>
         public static ColorManager Colors { get; private set; } = new ColorManager();
         /// <summary>
-        /// Makages the Inventories of the Players
+        /// Makages the Inventories of the Players.
         /// </summary>
         public static InventoryManager Inventories { get; private set; } = new InventoryManager();
+        /// <summary>
+        /// Manages your Weapons between peds.
+        /// </summary>
+        public static WeaponManager Weapons { get; private set; } = new WeaponManager();
 
         #endregion
 
@@ -103,8 +109,29 @@ namespace PlayerCompanion
                     Notification.Show($"~o~Warning~s~: Ped Model {Game.Player.Character.Model.Hash} does not has a Color set!");
                     Colors.Apply(Color.LightGray);
                 }
+                if (lastModel != default)
+                {
+                    Weapons[lastModel]?.Save(lastModel);
+                }
+                Weapons.Current?.Apply();
                 Inventories.Load(Game.Player.Character.Model);
+
                 lastModel = Game.Player.Character.Model;
+                nextWeaponUpdate = Game.GameTime + (1000 * 5);
+            }
+
+            // If is time to update the weapons that the player has
+            if (nextWeaponUpdate <= Game.GameTime)
+            {
+                Weapons.Current?.Populate();
+                nextWeaponUpdate = Game.GameTime + (1000 * 5);
+            }
+
+            // If is time to save the weapons
+            if (nextWeaponSave <= Game.GameTime)
+            {
+                Weapons.Current?.Save(Game.Player.Character.Model);
+                nextWeaponSave = Game.GameTime + (1000 * 30);
             }
         }
 
