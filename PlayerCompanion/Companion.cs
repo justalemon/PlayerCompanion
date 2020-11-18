@@ -16,7 +16,7 @@ namespace PlayerCompanion
         private static Model lastModel = Game.Player.Character.Model;
 
         internal static string location = Path.Combine(new Uri(Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase)).LocalPath, "PlayerCompanion");
-        internal static Configuration config = null;
+        internal static Configuration config = null; 
 
         #endregion
 
@@ -59,17 +59,17 @@ namespace PlayerCompanion
             }
 
             // If there is a configuration file, load it
-            string configLoc = Path.Combine(location, "Config.json");
-            if (File.Exists(configLoc))
+            string path = Path.Combine(location, "Config.json");
+            if (File.Exists(path))
             {
-                config = JsonConvert.DeserializeObject<Configuration>(File.ReadAllText(configLoc));
+                config = JsonConvert.DeserializeObject<Configuration>(File.ReadAllText(path));
             }
             // Otherwise, create a new one and save it
             else
             {
                 config = new Configuration();
                 Directory.CreateDirectory(location);
-                File.WriteAllText(Path.Combine(), JsonConvert.SerializeObject(config));
+                File.WriteAllText(Path.Combine(location, path), JsonConvert.SerializeObject(config));
             }
 
             // Finally, add the events that we need
