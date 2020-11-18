@@ -96,9 +96,11 @@ namespace PlayerCompanion
         /// </summary>
         public void Save()
         {
+            /*
             string path = Path.Combine(Locations.WeaponData, $"{Owner.Hash}.json");
             string contents = JsonConvert.SerializeObject(this);
             File.WriteAllText(path, contents);
+            */
         }
         /// <summary>
         /// Updates the values on the Weapon Set.

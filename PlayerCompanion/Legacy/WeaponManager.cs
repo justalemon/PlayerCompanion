@@ -32,6 +32,7 @@ namespace PlayerCompanion
 
         private void LoadPedWeapons()
         {
+            /*
             // Get the ped model
             Model model = Game.Player.Character.Model;
             // Format a path for the file
@@ -61,6 +62,7 @@ namespace PlayerCompanion
                 Directory.CreateDirectory(Locations.WeaponData);
                 File.WriteAllText(file, contents);
             }
+            */
         }
 
         #endregion
