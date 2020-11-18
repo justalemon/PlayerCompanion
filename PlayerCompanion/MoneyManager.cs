@@ -86,6 +86,7 @@ namespace PlayerCompanion
             // Otherwise, create an empty file
             else
             {
+                Directory.CreateDirectory(Companion.location);
                 File.WriteAllText(file, "{}");
             }
         }

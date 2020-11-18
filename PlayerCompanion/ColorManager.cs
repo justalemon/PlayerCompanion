@@ -132,6 +132,7 @@ namespace PlayerCompanion
             // Otherwise, write an empty dictionary
             else
             {
+                Directory.CreateDirectory(Companion.location);
                 File.WriteAllText(file, "{}");
             }
         }
