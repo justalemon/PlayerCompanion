@@ -1,6 +1,8 @@
 ﻿using GTA;
+using GTA.UI;
 using Newtonsoft.Json;
 using System;
+using System.Drawing;
 using System.IO;
 using System.Reflection;
 
@@ -13,7 +15,7 @@ namespace PlayerCompanion
     {
         #region 
 
-        private static Model lastModel = Game.Player.Character.Model;
+        private static Model lastModel = default;
 
         internal static string location = Path.Combine(new Uri(Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase)).LocalPath, "PlayerCompanion");
         internal static Configuration config = null; 
@@ -86,7 +88,6 @@ namespace PlayerCompanion
             // If PlayerCompanion is not ready to work, perform the initialization
             if (!IsReady)
             {
-                Inventories.Load(Game.Player.Character.Model);
                 IsReady = true;
             }
 
@@ -96,6 +97,11 @@ namespace PlayerCompanion
                 if (Colors.HasCustomColor(Game.Player.Character.Model))
                 {
                     Colors.Apply(Colors.Current);
+                }
+                else
+                {
+                    Notification.Show($"~o~Warning~s~: Ped Model {Game.Player.Character.Model.Hash} does not has a Color set!");
+                    Colors.Apply(Color.LightGray);
                 }
                 Inventories.Load(Game.Player.Character.Model);
                 lastModel = Game.Player.Character.Model;
