@@ -107,7 +107,17 @@ namespace PlayerCompanion
                 else
                 {
                     Notification.Show($"~o~Warning~s~: Ped Model {Game.Player.Character.Model.Hash} does not has a Color set!");
-                    Colors.Apply(Color.LightGray);
+                    switch ((PedHash)Game.Player.Character.Model)
+                    {
+                        case PedHash.Franklin:
+                        case PedHash.Michael:
+                        case PedHash.Trevor:
+                            Colors.RestoreDefault();
+                            break;
+                        default:
+                            Colors.Apply(Color.LightGray);
+                            break;
+                    }
                 }
                 if (lastModel != default)
                 {
