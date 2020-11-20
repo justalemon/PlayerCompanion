@@ -149,6 +149,9 @@ namespace PlayerCompanion
         {
             // Do the required cleanup tasks
             Colors.RestoreDefault();
+            // And save the user weapons
+            Weapons.Current?.Populate();
+            Weapons.Current?.Save(Game.Player.Character.Model);
         }
 
         #endregion
