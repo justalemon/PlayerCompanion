@@ -91,7 +91,7 @@ namespace PlayerCompanion
         public void Remove(Item item)
         {
             // If the item is not part of the menu, just return
-            if (items.Contains(item))
+            if (!items.Contains(item))
             {
                 return;
             }
