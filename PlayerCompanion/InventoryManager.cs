@@ -49,7 +49,11 @@ namespace PlayerCompanion
             this.manager = manager;
             if (items != null)
             {
-                this.items.AddRange(items);
+                foreach (Item item in items)
+                {
+                    item.inventory = this;
+                    this.items.Add(item);
+                }
             }
         }
 
@@ -64,10 +68,16 @@ namespace PlayerCompanion
         public void Add(Item item)
         {
             // If the item is already present, raise an exception
-            if (items.Contains(item))
+            if (item.inventory == this && items.Contains(item))
             {
-                throw new InvalidOperationException("The Item is already part of the inventory.");
+                throw new InvalidOperationException("The Item is already part of the Inventory.");
             }
+            // If the inventory is part of another inventory, raise an exception
+            if (item.inventory != null)
+            {
+                throw new InvalidOperationException("The Item is part of another Inventory.");
+            }
+
             // Otherwise, add it and trigger the events
             items.Add(item);
             ItemChangedEventArgs e = new ItemChangedEventArgs(item);

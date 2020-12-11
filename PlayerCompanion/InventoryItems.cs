@@ -98,11 +98,17 @@ namespace PlayerCompanion
 
     /// <summary>
     /// Represents a single Inventory Item.
-    /// </summary>}
+    /// </summary>
     [JsonConverter(typeof(ItemConverter))]
     public abstract class Item
     {
-        #region Public Properties
+        #region Fields
+
+        internal PedInventory inventory = null;
+
+        #endregion
+
+        #region Properties
 
         /// <summary>
         /// The name of the item shown on specific inventory interfaces.
@@ -120,6 +126,28 @@ namespace PlayerCompanion
         /// The Monetary value of this item.
         /// </summary>
         public virtual int Value => 0;
+        /// <summary>
+        /// The inventory that this Item is part of.
+        /// </summary>
+        public PedInventory Inventory => inventory;
+
+        #endregion
+
+        #region Functions
+
+        /// <summary>
+        /// Removes the Item from it's existing inventory.
+        /// </summary>
+        public void Remove()
+        {
+            if (inventory == null)
+            {
+                return;
+            }
+
+            inventory.Remove(this);
+            inventory = null;
+        }
 
         #endregion
     }
