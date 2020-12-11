@@ -115,7 +115,7 @@ namespace PlayerCompanion
         /// <summary>
         /// A custom white Sprite used as an icon for the item.
         /// </summary>
-        public abstract ScaledTexture Icon { get; set; }
+        public abstract ScaledTexture Icon { get; }
         /// <summary>
         /// The Monetary value of this item.
         /// </summary>
@@ -146,11 +146,11 @@ namespace PlayerCompanion
         /// <summary>
         /// The icon of the invalid item.
         /// </summary>
-        public override ScaledTexture Icon { get; set; } = new ScaledTexture("timerbar_icons", "pickup_random");
+        public override ScaledTexture Icon { get; } = new ScaledTexture("timerbar_icons", "pickup_random");
 
         #endregion
 
-        #region Constructor
+        #region Constructors
 
         internal InvalidItem(string type, int count)
         {
