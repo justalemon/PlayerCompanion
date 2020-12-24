@@ -93,7 +93,7 @@ namespace PlayerCompanion
         /// <summary>
         /// The maximum number of items that can be stored in a Stack.
         /// </summary>
-        public virtual int Maximum { get; }
+        public virtual int Maximum { get; } = int.MaxValue;
     }
 
     /// <summary>
