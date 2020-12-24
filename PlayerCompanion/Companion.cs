@@ -137,6 +137,7 @@ namespace PlayerCompanion
             // If PlayerCompanion is not ready to work, perform the initialization
             if (!IsReady)
             {
+                Inventories.PopulateItems();
                 IsReady = true;
             }
 

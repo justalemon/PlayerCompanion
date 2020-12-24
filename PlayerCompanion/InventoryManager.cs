@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 
 namespace PlayerCompanion
 {
@@ -122,6 +123,8 @@ namespace PlayerCompanion
     {
         #region Fields
 
+        private static readonly Random random = new Random();
+        private static readonly List<Type> items = new List<Type>();
         private static readonly Dictionary<Model, PedInventory> inventories = new Dictionary<Model, PedInventory>();
 
         #endregion
@@ -189,6 +192,50 @@ namespace PlayerCompanion
 
         #region Functions
 
+        /// <summary>
+        /// Generates a new Random Item from memory.
+        /// </summary>
+        /// <returns>A new item.</returns>
+        public Item GetRandomItem()
+        {
+            // If there are no items, return null
+            if (items.Count <= 0)
+            {
+                return null;
+            }
+
+            // Get a random item
+            Type type = items[random.Next(items.Count)];
+            Item item = (Item)Activator.CreateInstance(type);
+            return item;
+        }
+        /// <summary>
+        /// Populates a list of random items for the user to use.
+        /// </summary>
+        internal void PopulateItems()
+        {
+            // Clear the list of types
+            items.Clear();
+
+            // Iterate over the types in all of the assemblies and add those that inherit from Item to the list
+            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                // Skip dynamic assemblies
+                // GetExportedTypes() do not work
+                if (assembly.IsDynamic)
+                {
+                    continue;
+                }
+
+                foreach (Type type in assembly.GetExportedTypes())
+                {
+                    if (typeof(Item).IsAssignableFrom(type))
+                    {
+                        items.Add(type);
+                    }
+                }
+            }
+        }
         /// <summary>
         /// Loads the inventory of the specified Ped Model.
         /// </summary>
