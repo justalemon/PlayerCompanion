@@ -8,6 +8,8 @@ using System;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
+using System.Windows.Forms;
+using Control = GTA.Control;
 using Screen = LemonUI.Screen;
 
 namespace PlayerCompanion
@@ -29,6 +31,9 @@ namespace PlayerCompanion
             Outline = true
 
         };
+
+        internal static readonly ObjectPool pool = new ObjectPool();
+        internal static readonly InventoryMenu menu = new InventoryMenu();
 
         internal static string location = Path.Combine(new Uri(Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase)).LocalPath, "PlayerCompanion");
         internal static Configuration config = null; 
@@ -91,9 +96,14 @@ namespace PlayerCompanion
                 File.WriteAllText(Path.Combine(location, path), JsonConvert.SerializeObject(config));
             }
 
+            // Add the items to the pool
+            pool.Add(menu);
             // Finally, add the events that we need
             Tick += Companion_Tick;
             Aborted += Companion_Aborted;
+            KeyDown += Companion_KeyDown;
+            Inventories.ItemAdded += Inventories_ItemAdded;
+            Inventories.ItemRemoved += Inventories_ItemRemoved;
         }
 
         #endregion
@@ -128,6 +138,15 @@ namespace PlayerCompanion
             if (!IsReady)
             {
                 IsReady = true;
+            }
+
+            // Process the menu pool
+            pool.Process();
+
+            // If the player entered the inventory cheat, toggle it
+            if (Game.WasCheatStringJustEntered("inventory"))
+            {
+                menu.Visible = !menu.Visible;
             }
 
             // if the notification feed is paused and the user has the character wheel button pressed
@@ -169,6 +188,8 @@ namespace PlayerCompanion
                 Weapons.Current?.Apply();
                 Inventories.Load(Game.Player.Character.Model);
 
+                menu.ReloadItems();
+
                 lastModel = Game.Player.Character.Model;
                 nextWeaponUpdate = Game.GameTime + (1000 * 5);
             }
@@ -195,6 +216,26 @@ namespace PlayerCompanion
             // And save the user weapons
             Weapons.Current?.Populate();
             Weapons.Current?.Save(Game.Player.Character.Model);
+        }
+
+        private void Companion_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.I:
+                    menu.Visible = !menu.Visible;
+                    break;
+            }
+        }
+
+        private void Inventories_ItemAdded(object sender, ItemChangedEventArgs e)
+        {
+            menu.Add(new InventoryItem(e.Item));
+        }
+
+        private void Inventories_ItemRemoved(object sender, ItemChangedEventArgs e)
+        {
+            menu.Remove(item => item is InventoryItem ii && ii.Item == e.Item);
         }
 
         #endregion
