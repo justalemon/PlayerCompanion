@@ -1,10 +1,14 @@
 ﻿using GTA;
+using GTA.Native;
 using GTA.UI;
+using LemonUI;
+using LemonUI.Elements;
 using Newtonsoft.Json;
 using System;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
+using Screen = LemonUI.Screen;
 
 namespace PlayerCompanion
 {
@@ -13,11 +17,18 @@ namespace PlayerCompanion
     /// </summary>
     public class Companion : Script
     {
-        #region 
+        #region Fields
 
         private static Model lastModel = default;
         private static int nextWeaponUpdate = 0;
         private static int nextWeaponSave = 0;
+
+        private static readonly ScaledText moneyText = new ScaledText(PointF.Empty, "$0", 0.65f, GTA.UI.Font.Pricedown)
+        {
+            Alignment = Alignment.Right,
+            Outline = true
+
+        };
 
         internal static string location = Path.Combine(new Uri(Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase)).LocalPath, "PlayerCompanion");
         internal static Configuration config = null; 
@@ -87,6 +98,28 @@ namespace PlayerCompanion
 
         #endregion
 
+        #region Functions
+
+        /// <summary>
+        /// Updates the Text showing the user Money.
+        /// </summary>
+        private void UpdateMoneyText()
+        {
+            Screen.SetElementAlignment(GFXAlignment.Right, GFXAlignment.Top);
+            PointF position = Screen.GetRealPosition(0, 0);
+            Screen.ResetElementAlignment();
+
+            if (Hud.IsComponentActive(HudComponent.WantedStars))
+            {
+                position.Y += 35;
+            }
+
+            moneyText.Position = position;
+            moneyText.Text = $"${Money.Value}";
+        }
+
+        #endregion
+
         #region Events
 
         private void Companion_Tick(object sender, EventArgs e)
@@ -95,6 +128,16 @@ namespace PlayerCompanion
             if (!IsReady)
             {
                 IsReady = true;
+            }
+
+            // if the notification feed is paused and the user has the character wheel button pressed
+            // Draw the current money that the user has
+            if (Function.Call<bool>(Hash.THEFEED_IS_PAUSED) && Game.IsControlPressed(Control.CharacterWheel))
+            {
+                Hud.HideComponentThisFrame(HudComponent.Cash);
+                Hud.HideComponentThisFrame(HudComponent.CashChange);
+                UpdateMoneyText();
+                moneyText.Draw();
             }
 
             // If the Player Ped Model has been changed, make the required updates
