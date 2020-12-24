@@ -86,14 +86,41 @@ namespace PlayerCompanion
     /// </summary>
     public abstract class StackableItem : Item
     {
+        #region Fields
+
+        private int count = 0;
+
+        #endregion
+
+        #region Properties
+
         /// <summary>
         /// The total number of items in this Stack.
         /// </summary>
-        public virtual int Count { get; set; }
+        public int Count
+        {
+            get => count;
+            set
+            {
+                count = value;
+                CountChanged.Invoke(this, EventArgs.Empty);
+            }
+        }
         /// <summary>
         /// The maximum number of items that can be stored in a Stack.
         /// </summary>
         public virtual int Maximum { get; } = int.MaxValue;
+
+        #endregion
+
+        #region Events
+
+        /// <summary>
+        /// Event triggered when the Count of items changes.
+        /// </summary>
+        public event EventHandler CountChanged;
+
+        #endregion
     }
 
     /// <summary>
