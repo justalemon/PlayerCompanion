@@ -10,7 +10,7 @@ namespace PlayerCompanion
     /// <summary>
     /// Manages the money of the player.
     /// </summary>
-    public class MoneyManager
+    public class Wallet
     {
         #region Fields
 
@@ -21,9 +21,9 @@ namespace PlayerCompanion
         #region Properties
 
         /// <summary>
-        /// The money associated to the current Player Ped.
+        /// The Money associated to the current Player Ped.
         /// </summary>
-        public int Value
+        public int Money
         {
             get => this[Game.Player.Character.Model];
             set => this[Game.Player.Character.Model] = value;
@@ -70,9 +70,9 @@ namespace PlayerCompanion
         #region Constructor
 
         /// <summary>
-        /// Creates a new Money Manager.
+        /// Creates a new Wallet.
         /// </summary>
-        internal MoneyManager()
+        internal Wallet()
         {
             string file = Path.Combine(Companion.location, "Money.json");
             // If there is a money file, try to load it

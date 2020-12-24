@@ -44,7 +44,7 @@ namespace PlayerCompanion
         /// <summary>
         /// The manager for the Player Money.
         /// </summary>
-        public static MoneyManager Money { get; private set; } = new MoneyManager();
+        public static Wallet Wallet { get; private set; } = new Wallet();
         /// <summary>
         /// Manages the colors in the HUD and Radar.
         /// </summary>
@@ -115,7 +115,7 @@ namespace PlayerCompanion
             }
 
             moneyText.Position = position;
-            moneyText.Text = $"${Money.Value}";
+            moneyText.Text = $"${Wallet.Money}";
         }
 
         #endregion
