@@ -24,7 +24,7 @@ namespace PlayerCompanion
             // If there is no Type in the object, raise an exception
             if (!@object.ContainsKey("type"))
             {
-                throw new KeyNotFoundException("There was no Type specified in the class.");
+                throw new KeyNotFoundException("There was no Type specified in the item.");
             }
 
             // Get the total number of items
