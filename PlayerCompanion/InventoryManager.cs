@@ -25,6 +25,10 @@ namespace PlayerCompanion
         /// The Ped Model that owns this inventory.
         /// </summary>
         public Model Owner { get; }
+        /// <summary>
+        /// The items that are part of the inventory.
+        /// </summary>
+        public List<Item> Items => new List<Item>(items); // So the user can't modify them manually
 
         #endregion
 
