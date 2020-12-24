@@ -133,6 +133,15 @@ namespace PlayerCompanion
 
         #endregion
 
+        #region Events
+
+        /// <summary>
+        /// Event triggered when the Item has been used.
+        /// </summary>
+        public event EventHandler Used;
+
+        #endregion
+
         #region Functions
 
         /// <summary>
@@ -148,6 +157,10 @@ namespace PlayerCompanion
             inventory.Remove(this);
             inventory = null;
         }
+        /// <summary>
+        /// Uses the item.
+        /// </summary>
+        public void Use() => Used?.Invoke(this, EventArgs.Empty);
 
         #endregion
     }
