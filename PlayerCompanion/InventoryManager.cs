@@ -147,6 +147,12 @@ namespace PlayerCompanion
         {
             get
             {
+                // If the companion has not loaded entirely, return null
+                if (!Companion.IsReady)
+                {
+                    return null;
+                }
+
                 // Send the existing inventory if present
                 if (inventories.ContainsKey(model))
                 {
