@@ -67,6 +67,19 @@ namespace PlayerCompanion
         #region Functions
 
         /// <summary>
+        /// Saves the inventory.
+        /// </summary>
+        public void Save()
+        {
+            // Create the path of the items
+            string dir = Path.Combine(Companion.location, "Inventory");
+            Directory.CreateDirectory(dir);
+            string path = Path.Combine(dir, $"{Owner.Hash}.json");
+            // And save the contents
+            string contents = JsonConvert.SerializeObject(items);
+            File.WriteAllText(path, contents);
+        }
+        /// <summary>
         /// Adds an item to this inventory.
         /// </summary>
         /// <param name="item">The item to add.</param>
@@ -88,12 +101,27 @@ namespace PlayerCompanion
             ItemChangedEventArgs e = new ItemChangedEventArgs(item);
             ItemAdded?.Invoke(this, e);
             manager.OnItemAdded(this, e);
+            // Add the event used to save when required
+            if (item is StackableItem stackable)
+            {
+                stackable.CountChanged -= CountChanged;
+                stackable.CountChanged += CountChanged;
+            }
+            // Saving just in case
+            Save();
+        }
+        /// <summary>
+        /// Saves if the count has been changed.
+        /// </summary>
+        private void CountChanged(object sender, EventArgs e)
+        {
+            Save();
         }
         /// <summary>
         /// Removes an item from the inventory.
         /// </summary>
         /// <param name="item">The item to remove.</param>
-        public void Remove(Item item)
+        internal void Remove(Item item)
         {
             // If the item is not part of the menu, just return
             if (!items.Contains(item))
@@ -105,6 +133,8 @@ namespace PlayerCompanion
             ItemChangedEventArgs e = new ItemChangedEventArgs(item);
             ItemRemoved?.Invoke(this, e);
             manager.OnItemRemoved(this, e);
+            // Saving just in case
+            Save();
         }
         /// <summary>
         /// Checks if the item is part of this Inventory.
