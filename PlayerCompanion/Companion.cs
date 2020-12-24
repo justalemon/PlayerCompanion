@@ -139,6 +139,7 @@ namespace PlayerCompanion
             {
                 Inventories.PopulateItems();
                 IsReady = true;
+                return;
             }
 
             // Process the menu pool
