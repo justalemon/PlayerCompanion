@@ -23,7 +23,11 @@ namespace PlayerCompanion
         /// <summary>
         /// The money associated to the current Player Ped.
         /// </summary>
-        public int Value { get; set; }
+        public int Value
+        {
+            get => this[Game.Player.Character.Model];
+            set => this[Game.Player.Character.Model] = value;
+        }
         /// <summary>
         /// Gets or sets the money for a specific Ped Model.
         /// </summary>
