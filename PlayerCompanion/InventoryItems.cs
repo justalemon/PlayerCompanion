@@ -103,7 +103,7 @@ namespace PlayerCompanion
             set
             {
                 count = value;
-                CountChanged.Invoke(this, EventArgs.Empty);
+                CountChanged?.Invoke(this, EventArgs.Empty);
             }
         }
         /// <summary>
