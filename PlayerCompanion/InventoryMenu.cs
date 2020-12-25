@@ -22,6 +22,10 @@ namespace PlayerCompanion
         {
             Item = item;
             Activated += (sender, e) => Item.Use();
+            if (item is StackableItem stackable)
+            {
+                stackable.CountChanged += (sender, e) => Title = $"{stackable.Name} ({stackable.Count})";
+            }
         }
 
         #endregion
