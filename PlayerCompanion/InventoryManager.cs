@@ -128,16 +128,40 @@ namespace PlayerCompanion
                 throw new InvalidOperationException("The Item is part of another Inventory.");
             }
 
-            // Otherwise, add it and trigger the events
-            items.Add(item);
-            ItemChangedEventArgs e = new ItemChangedEventArgs(item);
-            ItemAdded?.Invoke(this, e);
-            manager.OnItemAdded(this, e);
-            // Add the event used to save when required
+            // Track if the item was added instead of updated
+            bool added = false;
+
+            // If the item is stackable, try to find an item with the same type
             if (item is StackableItem stackable)
             {
+                // Try to find an item and add the count
+                StackableItem found = (StackableItem)Find(item.GetType());
+                if (found != null)
+                {
+                    found.Count += stackable.Count;
+                }
+                else
+                {
+                    items.Add(item);
+                    added = true;
+                }
+                // And add the event used to save when required
                 stackable.CountChanged -= CountChanged;
                 stackable.CountChanged += CountChanged;
+            }
+            // Otherwise, add it as-is
+            else
+            {
+                Items.Add(item);
+                added = true;
+            }
+
+            // Otherwise, add it and trigger the events
+            if (added)
+            {
+                ItemChangedEventArgs e = new ItemChangedEventArgs(item);
+                ItemAdded?.Invoke(this, e);
+                manager.OnItemAdded(this, e);
             }
             // Saving just in case
             Save();
