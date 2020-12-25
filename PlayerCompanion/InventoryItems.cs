@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace PlayerCompanion
 {
@@ -67,7 +68,7 @@ namespace PlayerCompanion
             // Otherwise, save the real Type
             else
             {
-                @object["type"] = value.GetType().ToString();
+                @object["type"] = value.GetType().AssemblyQualifiedName;
             }
 
             // If the item type inherits from stackable, save the count
