@@ -265,7 +265,7 @@ namespace PlayerCompanion
 
                 foreach (Type type in assembly.GetExportedTypes())
                 {
-                    if (typeof(Item).IsAssignableFrom(type))
+                    if (typeof(Item).IsAssignableFrom(type) && !type.IsAbstract)
                     {
                         items.Add(type);
                     }
