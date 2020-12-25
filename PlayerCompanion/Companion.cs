@@ -65,6 +65,15 @@ namespace PlayerCompanion
 
         #endregion
 
+        #region Events
+
+        /// <summary>
+        /// Event Triggered when PlayerCompanion is ready to work.
+        /// </summary>
+        public static event EventHandler Ready;
+
+        #endregion
+
         #region Constructor
 
         /// <summary>
@@ -139,6 +148,7 @@ namespace PlayerCompanion
             {
                 Inventories.PopulateItems();
                 IsReady = true;
+                Ready?.Invoke(this, EventArgs.Empty);
                 return;
             }
 
