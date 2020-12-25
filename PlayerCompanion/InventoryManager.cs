@@ -241,8 +241,20 @@ namespace PlayerCompanion
             }
 
             // Get a random item
-            Type type = items[random.Next(items.Count)];
-            Item item = (Item)Activator.CreateInstance(type);
+            Item item = null;
+            while (item == null)
+            {
+                Type type = items[random.Next(items.Count)];
+                try
+                {
+                    item = (Item)Activator.CreateInstance(type);
+                }
+                catch (MissingMethodException)
+                {
+                    Notification.Show($"~o~Warning~s~: {type.Name} does not has a parameterless constructor!");
+                    item = null;
+                }
+            }
             return item;
         }
         /// <summary>
