@@ -4,7 +4,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 
 namespace PlayerCompanion
 {
@@ -89,7 +88,7 @@ namespace PlayerCompanion
     {
         #region Fields
 
-        private int count = 0;
+        private int count = 1;
 
         #endregion
 
