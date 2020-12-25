@@ -80,6 +80,38 @@ namespace PlayerCompanion
             File.WriteAllText(path, contents);
         }
         /// <summary>
+        /// Finds an item with the specified type.
+        /// </summary>
+        /// <typeparam name="T">The type of the Item.</typeparam>
+        /// <returns>The item that was found, null otherwise.</returns>
+        public Item Find<T>()
+        {
+            foreach (Item item in items)
+            {
+                if (item is T)
+                {
+                    return item;
+                }
+            }
+            return null;
+        }
+        /// <summary>
+        /// Finds an item with the specified type.
+        /// </summary>
+        /// <param name="type">The type of the Item.</param>
+        /// <returns>The item that was found, null otherwise.</returns>
+        public Item Find(Type type)
+        {
+            foreach (Item item in items)
+            {
+                if (item.GetType() == type)
+                {
+                    return item;
+                }
+            }
+            return null;
+        }
+        /// <summary>
         /// Adds an item to this inventory.
         /// </summary>
         /// <param name="item">The item to add.</param>
