@@ -67,7 +67,7 @@ namespace PlayerCompanion
         public void Update()
         {
             Components.Clear();
-            foreach (WeaponComponentHash component in Enum.GetValues(typeof(WeaponComponentHash)))
+            foreach (WeaponComponentHash component in WeaponManager.sets[WeaponHash])
             {
                 if (Function.Call<bool>(Hash.HAS_PED_GOT_WEAPON_COMPONENT, Game.Player.Character, WeaponHash, component))
                 {
@@ -119,7 +119,7 @@ namespace PlayerCompanion
         public void Populate()
         {
             Weapons.Clear();
-            foreach (WeaponHash hash in Enum.GetValues(typeof(WeaponHash)))
+            foreach (WeaponHash hash in WeaponManager.sets.Keys)
             {
                 if (hash == WeaponHash.Unarmed || hash == WeaponHash.Parachute)
                 {
@@ -164,6 +164,7 @@ namespace PlayerCompanion
     {
         #region Fields
 
+        internal static Dictionary<WeaponHash, List<WeaponComponentHash>> sets = new Dictionary<WeaponHash, List<WeaponComponentHash>>();
         private readonly Dictionary<Model, WeaponSet> weapons = new Dictionary<Model, WeaponSet>();
 
         #endregion
@@ -187,6 +188,26 @@ namespace PlayerCompanion
 
         internal WeaponManager()
         {
+            // Add the list of weapons and their components
+            foreach (WeaponHash hash in Enum.GetValues(typeof(WeaponHash)))
+            {
+                if (hash == WeaponHash.Unarmed || hash == WeaponHash.Parachute)
+                {
+                    continue;
+                }
+
+                List<WeaponComponentHash> components = new List<WeaponComponentHash>();
+
+                foreach (WeaponComponentHash component in Enum.GetValues(typeof(WeaponComponentHash)))
+                {
+                    if (Function.Call<bool>(Hash.DOES_WEAPON_TAKE_WEAPON_COMPONENT, hash, component))
+                    {
+                        components.Add(component);
+                    }
+                }
+
+                sets.Add(hash, components);
+            }
         }
 
         #endregion
