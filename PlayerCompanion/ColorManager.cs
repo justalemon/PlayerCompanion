@@ -164,21 +164,6 @@ namespace PlayerCompanion
             File.WriteAllText(Path.Combine(Companion.location, "Colors.json"), JsonConvert.SerializeObject(colors, colorConverter));
         }
         /// <summary>
-        /// Applies a color in the HUD:
-        /// </summary>
-        /// <param name="color">The color to apply.</param>
-        internal void Apply(Color color)
-        {
-            // Light
-            Function.Call(Hash.REPLACE_HUD_COLOUR_WITH_RGBA, 143, (int)color.R, (int)color.G, (int)color.B, (int)color.A); // M
-            Function.Call(Hash.REPLACE_HUD_COLOUR_WITH_RGBA, 144, (int)color.R, (int)color.G, (int)color.B, (int)color.A); // F
-            Function.Call(Hash.REPLACE_HUD_COLOUR_WITH_RGBA, 145, (int)color.R, (int)color.G, (int)color.B, (int)color.A); // T
-            // Dark
-            Function.Call(Hash.REPLACE_HUD_COLOUR_WITH_RGBA, 153, (int)color.R, (int)color.G, (int)color.B, (int)color.A); // M
-            Function.Call(Hash.REPLACE_HUD_COLOUR_WITH_RGBA, 154, (int)color.R, (int)color.G, (int)color.B, (int)color.A); // F
-            Function.Call(Hash.REPLACE_HUD_COLOUR_WITH_RGBA, 155, (int)color.R, (int)color.G, (int)color.B, (int)color.A); // T
-        }
-        /// <summary>
         /// Restores the colors to their default values.
         /// </summary>
         internal void RestoreDefault()
@@ -191,6 +176,21 @@ namespace PlayerCompanion
             Function.Call(Hash.REPLACE_HUD_COLOUR_WITH_RGBA, 153, 72, 103, 116, 255); // M
             Function.Call(Hash.REPLACE_HUD_COLOUR_WITH_RGBA, 154, 85, 118, 85, 255); // F
             Function.Call(Hash.REPLACE_HUD_COLOUR_WITH_RGBA, 155, 127, 81, 43, 255); // T
+        }
+        /// <summary>
+        /// Applies a color in the HUD temporarily:
+        /// </summary>
+        /// <param name="color">The color to apply.</param>
+        public void Apply(Color color)
+        {
+            // Light
+            Function.Call(Hash.REPLACE_HUD_COLOUR_WITH_RGBA, 143, (int)color.R, (int)color.G, (int)color.B, (int)color.A); // M
+            Function.Call(Hash.REPLACE_HUD_COLOUR_WITH_RGBA, 144, (int)color.R, (int)color.G, (int)color.B, (int)color.A); // F
+            Function.Call(Hash.REPLACE_HUD_COLOUR_WITH_RGBA, 145, (int)color.R, (int)color.G, (int)color.B, (int)color.A); // T
+            // Dark
+            Function.Call(Hash.REPLACE_HUD_COLOUR_WITH_RGBA, 153, (int)color.R, (int)color.G, (int)color.B, (int)color.A); // M
+            Function.Call(Hash.REPLACE_HUD_COLOUR_WITH_RGBA, 154, (int)color.R, (int)color.G, (int)color.B, (int)color.A); // F
+            Function.Call(Hash.REPLACE_HUD_COLOUR_WITH_RGBA, 155, (int)color.R, (int)color.G, (int)color.B, (int)color.A); // T
         }
         /// <summary>
         /// Checks if the Ped Model has a custom color set.
