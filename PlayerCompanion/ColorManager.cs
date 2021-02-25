@@ -51,6 +51,7 @@ namespace PlayerCompanion
     {
         #region Fields
 
+        private static readonly ColorConverter colorConverter = new ColorConverter();
         private readonly Color colorM = Color.FromArgb(255, 101, 180, 212);
         private readonly Color colorF = Color.FromArgb(255, 171, 237, 171);
         private readonly Color colorT = Color.FromArgb(255, 255, 163, 87);
@@ -122,7 +123,7 @@ namespace PlayerCompanion
                 string contents = File.ReadAllText(file);
                 try
                 {
-                    Dictionary<string, Color> values = JsonConvert.DeserializeObject<Dictionary<string, Color>>(contents, new ColorConverter());
+                    Dictionary<string, Color> values = JsonConvert.DeserializeObject<Dictionary<string, Color>>(contents, colorConverter);
                     foreach (KeyValuePair<string, Color> pair in values)
                     {
                         Model model;
@@ -160,7 +161,7 @@ namespace PlayerCompanion
         internal void Save()
         {
             Directory.CreateDirectory(Companion.location);
-            File.WriteAllText(Path.Combine(Companion.location, "Colors.json"), JsonConvert.SerializeObject(colors));
+            File.WriteAllText(Path.Combine(Companion.location, "Colors.json"), JsonConvert.SerializeObject(colors, colorConverter));
         }
         /// <summary>
         /// Applies a color in the HUD:
