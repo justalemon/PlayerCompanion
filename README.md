@@ -1,4 +1,4 @@
-# PlayerCompanion<br>[![AppVeyor][appveyor-img]][appveyor-url] [![NuGet][nuget-img]][nuget-url] [![Discord][discord-img]][discord-url]
+# PlayerCompanion<br>[![AppVeyor][appveyor-img]][appveyor-url] [![NuGet][nuget-img]][nuget-url] [![Patreon][patreon-img]][patreon-url] [![PayPal][paypal-img]][paypal-url] [![Discord][discord-img]][discord-url]
 
 PlayerCompanion is a mod for Grand Theft Auto V that aims to extend the gameplay features of the game by adding some extra tools for developers and users alike:
 
@@ -29,5 +29,9 @@ Check [the wiki](https://github.com/justalemon/PlayerCompanion/wiki) for the usa
 [appveyor-url]: https://ci.appveyor.com/project/justalemon/playercompanion
 [nuget-img]: https://img.shields.io/nuget/v/PlayerCompanion?label=nuget
 [nuget-url]: https://www.nuget.org/packages/PlayerCompanion/
+[patreon-img]: https://img.shields.io/badge/support-patreon-FF424D.svg
+[patreon-url]: https://www.patreon.com/lemonchan
+[paypal-img]: https://img.shields.io/badge/support-paypal-0079C1.svg
+[paypal-url]: https://paypal.me/justalemon
 [discord-img]: https://img.shields.io/badge/discord-join-7289DA.svg
 [discord-url]: https://discord.gg/Cf6sspj
