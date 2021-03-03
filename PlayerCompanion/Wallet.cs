@@ -37,7 +37,7 @@ namespace PlayerCompanion
         {
             get
             {
-                if (model == PedHash.Michael || model == PedHash.Franklin || model == PedHash.Franklin)
+                if (model == PedHash.Michael || model == PedHash.Franklin || model == PedHash.Trevor)
                 {
                     return Game.Player.Money;
                 }
