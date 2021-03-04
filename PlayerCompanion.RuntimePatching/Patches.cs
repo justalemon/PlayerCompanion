@@ -1,12 +1,15 @@
 ﻿extern alias SHVDN2;
-using GTA;
+extern alias SHVDN3;
 using HarmonyLib;
 
-namespace PlayerCompanion
+namespace PlayerCompanion.RuntimePatching
 {
+    /// <summary>
+    /// Patches for the Getter in SHVDN2.
+    /// </summary>
     [HarmonyPatch(typeof(SHVDN2::GTA.Player))]
     [HarmonyPatch("Money", MethodType.Getter)]
-    internal static class HarmonyMoneyGetterPatch2
+    internal static class MoneyGetterPatch2
     {
         public static bool Prefix(ref int __result)
         {
@@ -15,9 +18,12 @@ namespace PlayerCompanion
         }
     }
 
+    /// <summary>
+    /// Patches for the Setter in SHVDN2.
+    /// </summary>
     [HarmonyPatch(typeof(SHVDN2::GTA.Player))]
     [HarmonyPatch("Money", MethodType.Setter)]
-    internal static class HarmonyMoneySetterPatch2
+    internal static class MoneySetterPatch2
     {
         public static bool Prefix(ref int value)
         {
@@ -26,9 +32,12 @@ namespace PlayerCompanion
         }
     }
 
-    [HarmonyPatch(typeof(Player))]
+    /// <summary>
+    /// Patches for the Getter in SHVDN3.
+    /// </summary>
+    [HarmonyPatch(typeof(SHVDN3::GTA.Player))]
     [HarmonyPatch("Money", MethodType.Getter)]
-    internal static class HarmonyMoneyGetterPatch3
+    internal static class MoneyGetterPatch3
     {
         public static bool Prefix(ref int __result)
         {
@@ -37,9 +46,12 @@ namespace PlayerCompanion
         }
     }
 
-    [HarmonyPatch(typeof(Player))]
+    /// <summary>
+    /// Patches for the Setter in SHVDN3.
+    /// </summary>
+    [HarmonyPatch(typeof(SHVDN3::GTA.Player))]
     [HarmonyPatch("Money", MethodType.Setter)]
-    internal static class HarmonyMoneySetterPatch3
+    internal static class MoneySetterPatch3
     {
         public static bool Prefix(ref int value)
         {
