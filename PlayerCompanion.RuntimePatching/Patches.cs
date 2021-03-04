@@ -4,6 +4,8 @@ using HarmonyLib;
 
 namespace PlayerCompanion.RuntimePatching
 {
+    #region SHVDN2
+
     /// <summary>
     /// Patches for the Getter in SHVDN2.
     /// </summary>
@@ -48,6 +50,10 @@ namespace PlayerCompanion.RuntimePatching
         }
     }
 
+    #endregion
+
+    #region SHVDN3
+
     /// <summary>
     /// Patches for the Getter in SHVDN3.
     /// </summary>
@@ -91,4 +97,6 @@ namespace PlayerCompanion.RuntimePatching
             }
         }
     }
+
+    #endregion
 }
