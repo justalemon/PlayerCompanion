@@ -28,6 +28,7 @@
 
   <ItemGroup>
     <Reference Include="System.Windows.Forms" />
+    <PackageReference Include="Lib.Harmony" Version="2.0.4" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="ScriptHookVDotNet3" Version="3.1.0">
       <IncludeAssets>compile</IncludeAssets>

@@ -1,6 +1,7 @@
 ﻿using GTA;
 using GTA.Native;
 using GTA.UI;
+using HarmonyLib;
 using LemonUI;
 using LemonUI.Elements;
 using Newtonsoft.Json;
@@ -90,6 +91,16 @@ namespace PlayerCompanion
             {
                 throw new InvalidOperationException($"PlayerCompanion can only be started by ScriptHookVDotNet (it was called from '{name.Name}').");
             }
+
+            // Patch GTA.Player.Money property with Harmony
+#if DEBUG
+            Harmony.DEBUG = true;
+#endif
+            Harmony harmony = new Harmony("PlayerCompanion.Patches.GTA.Player.Money");
+            harmony.PatchAll();
+#if DEBUG
+            FileLog.FlushBuffer();
+#endif
 
             // If there is a configuration file, load it
             string path = Path.Combine(location, "Config.json");
