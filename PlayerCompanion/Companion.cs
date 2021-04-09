@@ -105,6 +105,9 @@ namespace PlayerCompanion
                 File.WriteAllText(Path.Combine(location, path), JsonConvert.SerializeObject(config));
             }
 
+            // Disable the cash on the screen
+            Function.Call(Hash.DISPLAY_CASH, false);
+
             // Add the items to the pool
             pool.Add(menu);
             // Finally, add the events that we need
@@ -225,6 +228,8 @@ namespace PlayerCompanion
         {
             // Do the required cleanup tasks
             Colors.RestoreDefault();
+            // Restore the money on the screen
+            Function.Call(Hash.DISPLAY_CASH, true);
             // And save the user weapons
             Weapons.Current?.Populate();
             Weapons.Current?.Save(Game.Player.Character.Model);
