@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <AssemblyName>$$(AssemblyName)</AssemblyName>
+    <DefineConstants>SHVDN3</DefineConstants>
+    <Version>1.0</Version>
+    <OutputPath>..\bin\$(Configuration)\</OutputPath>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <DocumentationFile>..\bin\$(Configuration)\$(AssemblyName).xml</DocumentationFile>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Lib.Harmony" Version="2.0.4" />
+    <PackageReference Include="ScriptHookVDotNet2" Version="2.10.14">
+      <IncludeAssets>compile</IncludeAssets>
+      <Aliases>SHVDN2</Aliases>
+    </PackageReference>
+    <PackageReference Include="ScriptHookVDotNet3" Version="3.1.0">
+      <IncludeAssets>compile</IncludeAssets>
+      <Aliases>SHVDN3</Aliases>
+    </PackageReference>
+    <ProjectReference Include="..\PlayerCompanion\PlayerCompanion.csproj" />
+  </ItemGroup>
+
+</Project>
