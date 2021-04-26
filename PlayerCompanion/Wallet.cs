@@ -62,6 +62,8 @@ namespace PlayerCompanion
                     moneyValues[model] = value;
                     Save();
                 }
+
+                Companion.moneyText.Text = $"${value}";
             }
         }
 

@@ -25,11 +25,10 @@ namespace PlayerCompanion
         private static int nextWeaponUpdate = 0;
         private static int nextWeaponSave = 0;
 
-        private static readonly ScaledText moneyText = new ScaledText(PointF.Empty, "$0", 0.65f, GTA.UI.Font.Pricedown)
+        internal static readonly ScaledText moneyText = new ScaledText(PointF.Empty, "$0", 0.65f, GTA.UI.Font.Pricedown)
         {
             Alignment = Alignment.Right,
             Outline = true
-
         };
 
         internal static readonly ObjectPool pool = new ObjectPool();
@@ -105,9 +104,6 @@ namespace PlayerCompanion
                 File.WriteAllText(Path.Combine(location, path), JsonConvert.SerializeObject(config));
             }
 
-            // Disable the cash on the screen
-            Function.Call(Hash.DISPLAY_CASH, false);
-
             // Add the items to the pool
             pool.Add(menu);
             // Finally, add the events that we need
@@ -116,27 +112,7 @@ namespace PlayerCompanion
             KeyDown += Companion_KeyDown;
             Inventories.ItemAdded += Inventories_ItemAdded;
             Inventories.ItemRemoved += Inventories_ItemRemoved;
-        }
-
-        #endregion
-
-        #region Functions
-
-        /// <summary>
-        /// Updates the Text showing the user Money.
-        /// </summary>
-        private void UpdateMoneyText()
-        {
-            Screen.SetElementAlignment(GFXAlignment.Right, GFXAlignment.Top);
-            PointF position = Screen.GetRealPosition(0, 0);
-            Screen.ResetElementAlignment();
-
-            if (Hud.IsComponentActive(HudComponent.WantedStars))
-            {
-                position.Y += 35;
-            }
-
-            moneyText.Position = position;
+            // And set the money text
             moneyText.Text = $"${Wallet.Money}";
         }
 
@@ -170,7 +146,14 @@ namespace PlayerCompanion
             {
                 Hud.HideComponentThisFrame(HudComponent.Cash);
                 Hud.HideComponentThisFrame(HudComponent.CashChange);
-                UpdateMoneyText();
+                Hud.HideComponentThisFrame(HudComponent.WantedStars);
+                Function.Call(Hash.DISPLAY_CASH, false);
+
+                Screen.SetElementAlignment(GFXAlignment.Right, GFXAlignment.Top);
+                PointF position = Screen.GetRealPosition(0, 0);
+                Screen.ResetElementAlignment();
+
+                moneyText.Position = position;
                 moneyText.Draw();
             }
 
