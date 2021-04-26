@@ -15,16 +15,8 @@ namespace PlayerCompanion.RuntimePatching
     {
         public static bool Prefix(ref int __result)
         {
-            switch ((SHVDN2::GTA.Native.PedHash)SHVDN2::GTA.Game.Player.Character.Model)
-            {
-                case SHVDN2::GTA.Native.PedHash.Michael:
-                case SHVDN2::GTA.Native.PedHash.Franklin:
-                case SHVDN2::GTA.Native.PedHash.Trevor:
-                    return true;
-                default:
-                    __result = Companion.Wallet.Money;
-                    return false;
-            }
+            __result = Companion.Wallet.Money;
+            return false;
         }
     }
 
@@ -37,16 +29,8 @@ namespace PlayerCompanion.RuntimePatching
     {
         public static bool Prefix(ref int value)
         {
-            switch ((SHVDN2::GTA.Native.PedHash)SHVDN2::GTA.Game.Player.Character.Model)
-            {
-                case SHVDN2::GTA.Native.PedHash.Michael:
-                case SHVDN2::GTA.Native.PedHash.Franklin:
-                case SHVDN2::GTA.Native.PedHash.Trevor:
-                    return true;
-                default:
-                    Companion.Wallet.Money = value;
-                    return false;
-            }
+            Companion.Wallet.Money = value;
+            return false;
         }
     }
 
@@ -63,16 +47,8 @@ namespace PlayerCompanion.RuntimePatching
     {
         public static bool Prefix(ref int __result)
         {
-            switch ((SHVDN3::GTA.PedHash)SHVDN3::GTA.Game.Player.Character.Model)
-            {
-                case SHVDN3::GTA.PedHash.Michael:
-                case SHVDN3::GTA.PedHash.Franklin:
-                case SHVDN3::GTA.PedHash.Trevor:
-                    return true;
-                default:
-                    __result = Companion.Wallet.Money;
-                    return false;
-            }
+            __result = Companion.Wallet.Money;
+            return false;
         }
     }
 
@@ -85,16 +61,8 @@ namespace PlayerCompanion.RuntimePatching
     {
         public static bool Prefix(ref int value)
         {
-            switch ((SHVDN3::GTA.PedHash)SHVDN3::GTA.Game.Player.Character.Model)
-            {
-                case SHVDN3::GTA.PedHash.Michael:
-                case SHVDN3::GTA.PedHash.Franklin:
-                case SHVDN3::GTA.PedHash.Trevor:
-                    return true;
-                default:
-                    Companion.Wallet.Money = value;
-                    return false;
-            }
+            Companion.Wallet.Money = value;
+            return false;
         }
     }
 

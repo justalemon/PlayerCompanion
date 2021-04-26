@@ -1,4 +1,5 @@
 ﻿using GTA;
+using GTA.Native;
 using GTA.UI;
 using Newtonsoft.Json;
 using System;
@@ -40,7 +41,26 @@ namespace PlayerCompanion
             {
                 if (model == PedHash.Michael || model == PedHash.Franklin || model == PedHash.Trevor)
                 {
-                    return Game.Player.Money;
+                    int stat = 0;
+                    switch ((PedHash)model)
+                    {
+                        case PedHash.Michael:
+                            stat = Game.GenerateHash("SP0_TOTAL_CASH");
+                            break;
+                        case PedHash.Franklin:
+                            stat = Game.GenerateHash("SP1_TOTAL_CASH");
+                            break;
+                        case PedHash.Trevor:
+                            stat = Game.GenerateHash("SP2_TOTAL_CASH");
+                            break;
+                    }
+
+                    int result = 0;
+                    unsafe
+                    {
+                        Function.Call(Hash.STAT_GET_INT, stat, &result, -1);
+                    }
+                    return result;
                 }
                 else
                 {
@@ -64,7 +84,20 @@ namespace PlayerCompanion
 
                 if (model == PedHash.Michael || model == PedHash.Franklin || model == PedHash.Franklin)
                 {
-                    Game.Player.Money = value;
+                    int stat = 0;
+                    switch ((PedHash)model)
+                    {
+                        case PedHash.Michael:
+                            stat = Game.GenerateHash("SP0_TOTAL_CASH");
+                            break;
+                        case PedHash.Franklin:
+                            stat = Game.GenerateHash("SP1_TOTAL_CASH");
+                            break;
+                        case PedHash.Trevor:
+                            stat = Game.GenerateHash("SP2_TOTAL_CASH");
+                            break;
+                    }
+                    Function.Call(Hash.STAT_SET_INT, stat, value, 1);
                 }
                 else
                 {
