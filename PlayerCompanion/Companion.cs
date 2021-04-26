@@ -25,11 +25,17 @@ namespace PlayerCompanion
         private static int nextWeaponUpdate = 0;
         private static int nextWeaponSave = 0;
 
-        internal static readonly ScaledText moneyText = new ScaledText(PointF.Empty, "$0", 0.65f, GTA.UI.Font.Pricedown)
+        internal static readonly ScaledText moneyTotal = new ScaledText(PointF.Empty, "$0", 0.65f, GTA.UI.Font.Pricedown)
         {
             Alignment = Alignment.Right,
             Outline = true
         };
+        internal static readonly ScaledText moneyChange = new ScaledText(PointF.Empty, "$0", 0.5f, GTA.UI.Font.Pricedown)
+        {
+            Alignment = Alignment.Right,
+            Outline = true
+        };
+        internal static int drawUntil = 0;
 
         internal static readonly ObjectPool pool = new ObjectPool();
         internal static readonly InventoryMenu menu = new InventoryMenu();
@@ -113,7 +119,7 @@ namespace PlayerCompanion
             Inventories.ItemAdded += Inventories_ItemAdded;
             Inventories.ItemRemoved += Inventories_ItemRemoved;
             // And set the money text
-            moneyText.Text = $"${Wallet.Money}";
+            moneyTotal.Text = $"${Wallet.Money}";
         }
 
         #endregion
@@ -140,21 +146,37 @@ namespace PlayerCompanion
                 menu.Visible = !menu.Visible;
             }
 
-            // if the notification feed is paused and the user has the character wheel button pressed
-            // Draw the current money that the user has
-            if (Function.Call<bool>(Hash.THEFEED_IS_PAUSED) && Game.IsControlPressed(Control.CharacterWheel))
-            {
-                Hud.HideComponentThisFrame(HudComponent.Cash);
-                Hud.HideComponentThisFrame(HudComponent.CashChange);
-                Hud.HideComponentThisFrame(HudComponent.WantedStars);
-                Function.Call(Hash.DISPLAY_CASH, false);
+            // Hide the vanilla Money text
+            Hud.HideComponentThisFrame(HudComponent.Cash);
+            Hud.HideComponentThisFrame(HudComponent.CashChange);
+            Hud.HideComponentThisFrame(HudComponent.WantedStars);
+            Function.Call(Hash.DISPLAY_CASH, false);
 
+            bool switchOpen = Function.Call<bool>(Hash.THEFEED_IS_PAUSED) && Game.IsControlPressed(Control.CharacterWheel);
+            // If the player is pressing alt, draw the total money
+            if (switchOpen)
+            {
                 Screen.SetElementAlignment(GFXAlignment.Right, GFXAlignment.Top);
                 PointF position = Screen.GetRealPosition(0, 0);
                 Screen.ResetElementAlignment();
 
-                moneyText.Position = position;
-                moneyText.Draw();
+                moneyTotal.Position = position;
+                moneyTotal.Draw();
+            }
+            // If the player has received or got money removed
+            if (drawUntil >= Game.GameTime)
+            {
+                Screen.SetElementAlignment(GFXAlignment.Right, GFXAlignment.Top);
+                PointF position = Screen.GetRealPosition(0, 0);
+                Screen.ResetElementAlignment();
+
+                if (switchOpen)
+                {
+                    position.Y += 40;
+                }
+
+                moneyChange.Position = position;
+                moneyChange.Draw();
             }
 
             // If the Player Ped Model has been changed, make the required updates

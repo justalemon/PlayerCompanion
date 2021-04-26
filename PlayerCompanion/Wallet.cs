@@ -3,6 +3,7 @@ using GTA.UI;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 
 namespace PlayerCompanion
@@ -53,6 +54,14 @@ namespace PlayerCompanion
                     throw new ArgumentOutOfRangeException(nameof(value), "Money can't be under Zero.");
                 }
 
+                int difference = value - this[model];
+                bool positive = difference > 0;
+                string sign = positive ? "+" : "-";
+                Companion.moneyChange.Text = $"{sign}${Math.Abs(difference)}";
+                Companion.moneyChange.Color = positive ? Color.LightGreen : Color.Red;
+                Companion.drawUntil = Game.GameTime + 5000;
+                Companion.moneyTotal.Text = $"${value}";
+
                 if (model == PedHash.Michael || model == PedHash.Franklin || model == PedHash.Franklin)
                 {
                     Game.Player.Money = value;
@@ -62,8 +71,6 @@ namespace PlayerCompanion
                     moneyValues[model] = value;
                     Save();
                 }
-
-                Companion.moneyText.Text = $"${value}";
             }
         }
 
