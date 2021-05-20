@@ -149,14 +149,14 @@ namespace PlayerCompanion
             // Hide the vanilla Money text
             Hud.HideComponentThisFrame(HudComponent.Cash);
             Hud.HideComponentThisFrame(HudComponent.CashChange);
-            Hud.HideComponentThisFrame(HudComponent.WantedStars);
             Function.Call(Hash.DISPLAY_CASH, false);
 
             bool switchOpen = Function.Call<bool>(Hash.THEFEED_IS_PAUSED) && Game.IsControlPressed(Control.CharacterWheel);
+            bool starsShown = Hud.IsComponentActive(HudComponent.WantedStars);
             bool ammoShown = Hud.IsComponentActive(HudComponent.WeaponIcon);
 
             Screen.SetElementAlignment(GFXAlignment.Right, GFXAlignment.Top);
-            PointF position = Screen.GetRealPosition(0, ammoShown ? 35 : 0);
+            PointF position = Screen.GetRealPosition(0, (ammoShown ? 35 : 0) + (starsShown ? 40 : 0));
             Screen.ResetElementAlignment();
 
             // If the player is pressing alt, draw the total money
