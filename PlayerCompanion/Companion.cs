@@ -153,29 +153,27 @@ namespace PlayerCompanion
             Function.Call(Hash.DISPLAY_CASH, false);
 
             bool switchOpen = Function.Call<bool>(Hash.THEFEED_IS_PAUSED) && Game.IsControlPressed(Control.CharacterWheel);
+            bool ammoShown = Hud.IsComponentActive(HudComponent.WeaponIcon);
+
+            Screen.SetElementAlignment(GFXAlignment.Right, GFXAlignment.Top);
+            PointF position = Screen.GetRealPosition(0, ammoShown ? 35 : 0);
+            Screen.ResetElementAlignment();
+
             // If the player is pressing alt, draw the total money
             if (switchOpen)
             {
-                Screen.SetElementAlignment(GFXAlignment.Right, GFXAlignment.Top);
-                PointF position = Screen.GetRealPosition(0, 0);
-                Screen.ResetElementAlignment();
-
                 moneyTotal.Position = position;
                 moneyTotal.Draw();
             }
             // If the player has received or got money removed
             if (drawUntil >= Game.GameTime)
             {
-                Screen.SetElementAlignment(GFXAlignment.Right, GFXAlignment.Top);
-                PointF position = Screen.GetRealPosition(0, 0);
-                Screen.ResetElementAlignment();
-
                 if (switchOpen)
                 {
                     position.Y += 40;
                 }
 
-                moneyChange.Position = position;
+                moneyChange.Position = new PointF(position.X, position.Y);
                 moneyChange.Draw();
             }
 
