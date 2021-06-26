@@ -147,7 +147,6 @@ namespace PlayerCompanion
         /// </summary>
         public void Apply()
         {
-            Function.Call(Hash.REMOVE_ALL_PED_WEAPONS, Game.Player.Character);
             foreach (WeaponInfo weapon in Weapons)
             {
                 weapon.Apply();
