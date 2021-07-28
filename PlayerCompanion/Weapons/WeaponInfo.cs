@@ -79,8 +79,10 @@ namespace PlayerCompanion
         /// </summary>
         public void Apply()
         {
-            Function.Call(Hash.REMOVE_WEAPON_FROM_PED, Game.Player.Character, WeaponHash);
-            Function.Call(Hash.GIVE_WEAPON_TO_PED, Game.Player.Character, WeaponHash, 0, false, false);
+            if (!Function.Call<bool>(Hash.HAS_PED_GOT_WEAPON, Game.Player.Character, WeaponHash, false))
+            {
+                Function.Call(Hash.GIVE_WEAPON_TO_PED, Game.Player.Character, WeaponHash, 0, false, false);
+            }
 
             foreach (WeaponComponentHash component in Components)
             {
