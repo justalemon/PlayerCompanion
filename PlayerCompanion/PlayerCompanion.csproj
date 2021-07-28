@@ -6,7 +6,7 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <AssemblyName>$(AssemblyName)</AssemblyName>
     <DefineConstants>SHVDN3</DefineConstants>
-    <Version>1.2.1</Version>
+    <Version>1.2.2</Version>
     <OutputPath>..\bin\$(Configuration)\</OutputPath>
     <PlatformTarget>x64</PlatformTarget>
     <DebugType>full</DebugType>
