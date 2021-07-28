@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net48</TargetFramework>
@@ -8,9 +8,13 @@
     <DefineConstants>SHVDN3</DefineConstants>
     <Version>1.2.1</Version>
     <OutputPath>..\bin\$(Configuration)\</OutputPath>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <DocumentationFile>..\bin\$(Configuration)\$(AssemblyName).xml</DocumentationFile>
     <PlatformTarget>x64</PlatformTarget>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	<DocumentationFile>..\bin\$(Configuration)\$(AssemblyName).xml</DocumentationFile>
 
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
@@ -24,8 +28,7 @@
     <RepositoryUrl>https://github.com/justalemon/PlayerCompanion.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <NeutralLanguage>en-US</NeutralLanguage>
-    <PackageOutputPath>..\bin\$(Configuration)</PackageOutputPath>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PackageOutputPath>..\bin\$(Configuration)\FOR DEVELOPERS\</PackageOutputPath>
   </PropertyGroup>
 
   <ItemGroup>
