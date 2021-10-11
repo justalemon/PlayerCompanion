@@ -29,17 +29,23 @@ namespace PlayerCompanion
         public void Populate()
         {
             Weapons.Clear();
-            foreach (WeaponHash hash in WeaponManager.sets.Keys)
+
+            foreach (WeaponHash weaponHash in Weapon.GetAllWeaponHashesForHumanPeds())
             {
-                if (hash == WeaponHash.Unarmed || hash == WeaponHash.Parachute)
+                if (weaponHash == WeaponHash.Unarmed || weaponHash == WeaponHash.Parachute)
                 {
                     continue;
                 }
-                if (Function.Call<bool>(Hash.HAS_PED_GOT_WEAPON, Game.Player.Character, hash, false))
+
+                Weapon weapon = Game.Player.Character.Weapons[weaponHash];
+
+                if (!weapon.IsPresent)
                 {
-                    WeaponInfo info = new WeaponInfo(hash);
-                    Weapons.Add(info);
+                    continue;
                 }
+
+                WeaponInfo info = new WeaponInfo(weaponHash);
+                Weapons.Add(info);
             }
         }
         /// <summary>

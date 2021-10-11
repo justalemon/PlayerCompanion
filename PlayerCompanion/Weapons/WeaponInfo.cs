@@ -1,5 +1,4 @@
 ﻿using GTA;
-using GTA.Native;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 
@@ -64,32 +63,38 @@ namespace PlayerCompanion
         public void Update()
         {
             Components.Clear();
-            foreach (WeaponComponentHash component in WeaponManager.sets[WeaponHash])
+
+            Weapon weapon = Game.Player.Character.Weapons[WeaponHash];
+
+            foreach (WeaponComponent component in weapon.Components)
             {
-                if (Function.Call<bool>(Hash.HAS_PED_GOT_WEAPON_COMPONENT, Game.Player.Character, WeaponHash, component))
+                if (component.Active)
                 {
-                    Components.Add(component);
+                    Components.Add(component.ComponentHash);
                 }
             }
-            Ammo = Function.Call<int>(Hash.GET_AMMO_IN_PED_WEAPON, Game.Player.Character, WeaponHash);
-            Tint = Function.Call<int>(Hash.GET_PED_WEAPON_TINT_INDEX, Game.Player.Character, WeaponHash);
+
+            Ammo = weapon.Ammo;
+            Tint = (int)weapon.Tint;
         }
         /// <summary>
         /// Applies this weapon information.
         /// </summary>
         public void Apply()
         {
-            if (!Function.Call<bool>(Hash.HAS_PED_GOT_WEAPON, Game.Player.Character, WeaponHash, false))
-            {
-                Function.Call(Hash.GIVE_WEAPON_TO_PED, Game.Player.Character, WeaponHash, 0, false, false);
-            }
+            WeaponCollection collection = Game.Player.Character.Weapons;
+
+            collection.Remove(WeaponHash);
+
+            Weapon weapon = collection.HasWeapon(WeaponHash) ? collection[WeaponHash] : collection.Give(WeaponHash, 0, false, true);
+
+            weapon.Ammo = Ammo;
+            weapon.Tint = (WeaponTint)Tint;
 
             foreach (WeaponComponentHash component in Components)
             {
-                Function.Call(Hash.GIVE_WEAPON_COMPONENT_TO_PED, Game.Player.Character, WeaponHash, component);
+                weapon.Components[component].Active = true;
             }
-            Function.Call(Hash.SET_PED_AMMO, Game.Player.Character, WeaponHash, Ammo);
-            Function.Call(Hash.SET_PED_WEAPON_TINT_INDEX, Game.Player.Character, WeaponHash, Tint);
         }
 
         #endregion

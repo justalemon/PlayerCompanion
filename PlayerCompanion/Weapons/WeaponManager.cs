@@ -1,8 +1,6 @@
 ﻿using GTA;
-using GTA.Native;
 using GTA.UI;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -15,7 +13,6 @@ namespace PlayerCompanion
     {
         #region Fields
 
-        internal static Dictionary<WeaponHash, List<WeaponComponentHash>> sets = new Dictionary<WeaponHash, List<WeaponComponentHash>>();
         private readonly Dictionary<Model, WeaponSet> weapons = new Dictionary<Model, WeaponSet>();
 
         #endregion
@@ -39,26 +36,6 @@ namespace PlayerCompanion
 
         internal WeaponManager()
         {
-            // Add the list of weapons and their components
-            foreach (WeaponHash hash in Enum.GetValues(typeof(WeaponHash)))
-            {
-                if (hash == WeaponHash.Unarmed || hash == WeaponHash.Parachute)
-                {
-                    continue;
-                }
-
-                List<WeaponComponentHash> components = new List<WeaponComponentHash>();
-
-                foreach (WeaponComponentHash component in Enum.GetValues(typeof(WeaponComponentHash)))
-                {
-                    if (Function.Call<bool>(Hash.DOES_WEAPON_TAKE_WEAPON_COMPONENT, hash, component))
-                    {
-                        components.Add(component);
-                    }
-                }
-
-                sets.Add(hash, components);
-            }
         }
 
         #endregion
@@ -72,21 +49,20 @@ namespace PlayerCompanion
         /// <param name="model">The Ped Model.</param>
         private WeaponSet LoadOrCreate(Model model)
         {
-            // If there is already a weapon set for the ped, return it
             if (weapons.ContainsKey(model))
             {
                 return weapons[model];
             }
-            // Otherwise, try to load it from a file
+
             string file = Path.Combine(Companion.location, "Weapons", $"{model.Hash}.json");
-            // If it does not exists, create a new inventory and save it
+
             if (!File.Exists(file))
             {
                 WeaponSet newSet = new WeaponSet();
                 weapons[model] = newSet;
                 return newSet;
             }
-            // If it does, try to load it
+
             try
             {
                 string contents = File.ReadAllText(file);
