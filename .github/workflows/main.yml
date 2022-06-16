@@ -1,0 +1,31 @@
+name: Compile Mod
+on:
+  - push
+  - pull_request
+
+jobs:
+  lint-and-compile:
+    strategy:
+      matrix:
+        configuration: [Debug, Release]
+    runs-on: windows-2022
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Add msbuild
+        uses: microsoft/setup-msbuild@v1.1
+      - name: Restore NuGet Packages
+        run: nuget restore ${{ github.event.repository.name }}.sln
+      - name: Patch csproj version
+        uses: justalemon/VersionPatcher@ff473034af090907184812b731fc3bc1a272b308
+        with:
+          version: 1.2.2.${{ github.run_number }}
+          csproj-files: "**/**.csproj"
+      - name: Compile
+        working-directory: ${{ env.GITHUB_WORKSPACE }}
+        run: msbuild -m -p:Configuration=${{ matrix.configuration }} ${{ github.event.repository.name }}.sln
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ github.event.repository.name }}.${{ matrix.configuration }}
+          path: bin/${{ matrix.configuration }}
