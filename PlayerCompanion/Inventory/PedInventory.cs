@@ -61,6 +61,42 @@ namespace PlayerCompanion
         }
 
         #endregion
+        
+        #region Tools
+
+        private T FindTypeGeneric<T>(bool returnNull) where T: Item
+        {
+            foreach (Item item in items)
+            {
+                if (item is T actualItem)
+                {
+                    return actualItem;
+                }
+            }
+
+            if (returnNull)
+            {
+                return null;
+            }
+
+            T newItem = Activator.CreateInstance<T>();
+            Add(newItem);
+            return newItem;
+        }
+        private Item FindTypeType(Type type)
+        {
+            foreach (Item item in items)
+            {
+                if (item.GetType() == type)
+                {
+                    return item;
+                }
+            }
+
+            return null;
+        }
+        
+        #endregion
 
         #region Functions
 
@@ -78,10 +114,42 @@ namespace PlayerCompanion
             File.WriteAllText(path, contents);
         }
         /// <summary>
+        /// Tries to find an item with the matching type. If is not found, it will add a new one to the inventory.
+        /// </summary>
+        /// <typeparam name="T">The type of item to find.</typeparam>
+        /// <returns>The item found, or a new one that was added to the inventory with the same type.</returns>
+        /// <remarks>
+        /// The item needs to have a parameterless constructor, otherwise an exception might be raised.
+        /// </remarks>
+        /// <exception cref="MissingMethodException">The item does not has a parameterless constructor.</exception>
+        public T FindOrCreate<T>() where T: StackableItem => FindTypeGeneric<T>(false);
+        /// <summary>
+        /// Tries to find an item with the matching type.
+        /// </summary>
+        /// <typeparam name="T">The type of item to find.</typeparam>
+        /// <returns>The item found, or <see langword="null"/> if none were found.</returns>
+        public T FindSingle<T>() where T: StackableItem => FindTypeGeneric<T>(true);
+        /// <summary>
+        /// Finds all of the items that match a specific type.
+        /// </summary>
+        /// <typeparam name="T">The type of item to find.</typeparam>
+        /// <returns>An iterator returning all of the items found.</returns> 
+        public IEnumerator<T> FindMany<T>() where T : Item
+        {
+            foreach (Item item in items)
+            {
+                if (item is T)
+                {
+                    yield return (T)item;
+                }
+            }
+        }
+        /// <summary>
         /// Finds an item with the specified type.
         /// </summary>
         /// <typeparam name="T">The type of the Item.</typeparam>
         /// <returns>The item that was found, null otherwise.</returns>
+        [Obsolete("Find<T>() and Find(Type) are Obsolete, please use FindOrCreate<T>(), FindSingle<T>() or FindMany<T>() instead", true)]
         public Item Find<T>()
         {
             foreach (Item item in items)
@@ -98,43 +166,28 @@ namespace PlayerCompanion
         /// </summary>
         /// <param name="type">The type of the Item.</param>
         /// <returns>The item that was found, null otherwise.</returns>
-        public Item Find(Type type)
-        {
-            foreach (Item item in items)
-            {
-                if (item.GetType() == type)
-                {
-                    return item;
-                }
-            }
-            return null;
-        }
+        [Obsolete("Find<T>() and Find(Type) are Obsolete, please use FindOrCreate<T>(), FindSingle<T>() or FindMany<T>() instead", true)]
+        public Item Find(Type type) => FindTypeType(type);
         /// <summary>
         /// Adds an item to this inventory.
         /// </summary>
         /// <param name="item">The item to add.</param>
         public void Add(Item item)
         {
-            // If the item is already present, raise an exception
             if (item.inventory == this && items.Contains(item))
             {
                 throw new InvalidOperationException("The Item is already part of the Inventory.");
             }
-            // If the inventory is part of another inventory, raise an exception
             if (item.inventory != null)
             {
                 throw new InvalidOperationException("The Item is part of another Inventory.");
             }
 
-            // Track if the item was added instead of updated
             bool added = false;
 
-            // If the item is stackable, try to find an item with the same type
             if (item is StackableItem stackable)
             {
-                // Try to find an item and add the count
-                StackableItem found = (StackableItem)Find(item.GetType());
-                if (found != null)
+                if (FindTypeType(item.GetType()) is StackableItem found)
                 {
                     found.Count += stackable.Count;
                 }
@@ -143,25 +196,23 @@ namespace PlayerCompanion
                     items.Add(item);
                     added = true;
                 }
-                // And add the event used to save when required
+                
                 stackable.CountChanged -= CountChanged;
                 stackable.CountChanged += CountChanged;
             }
-            // Otherwise, add it as-is
             else
             {
                 Items.Add(item);
                 added = true;
             }
 
-            // Otherwise, add it and trigger the events
             if (added)
             {
                 ItemChangedEventArgs e = new ItemChangedEventArgs(item);
                 ItemAdded?.Invoke(this, e);
                 manager.OnItemAdded(this, e);
             }
-            // Saving just in case
+            
             Save();
         }
         /// <summary>
