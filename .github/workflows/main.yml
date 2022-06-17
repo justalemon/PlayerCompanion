@@ -36,6 +36,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Setup NuGet
+        uses: nuget/setup-nuget@v1.0.6
+        with:
+          nuget-api-key: ${{ secrets.NUGET }}
+          nuget-version: latest
       - name: Download the Artifact
         uses: actions/download-artifact@v3
         with:
