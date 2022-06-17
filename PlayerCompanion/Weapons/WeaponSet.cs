@@ -39,7 +39,7 @@ namespace PlayerCompanion
 
                 Weapon weapon = Game.Player.Character.Weapons[weaponHash];
 
-                if (!weapon.IsPresent)
+                if (weapon == null || !weapon.IsPresent)
                 {
                     continue;
                 }
