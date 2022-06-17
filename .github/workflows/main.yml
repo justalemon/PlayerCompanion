@@ -1,7 +1,10 @@
 name: Compile Mod
 on:
-  - push
-  - pull_request
+  release:
+    types:
+      - created
+  push:
+  pull_request:
 
 jobs:
   lint-and-compile:
@@ -31,6 +34,7 @@ jobs:
           path: bin/${{ matrix.configuration }}
   deploy:
     runs-on: ubuntu-22.04
+    if: ${{ github.event_name == 'release' }}
     needs:
       - lint-and-compile
     steps:
