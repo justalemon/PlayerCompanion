@@ -40,3 +40,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: ${{ github.event.repository.name }}.Release
+          path: bin/Release
+      - name: List Everything
+        run: ls -R
+        working-directory: bin/Release
