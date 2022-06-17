@@ -39,4 +39,4 @@ jobs:
       - name: Download the Artifact
         uses: actions/download-artifact@v3
         with:
-          name: ${{ github.event.repository.name }}.${{ matrix.configuration }}
+          name: ${{ github.event.repository.name }}.Release
