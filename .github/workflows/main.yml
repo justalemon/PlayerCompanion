@@ -34,7 +34,7 @@ jobs:
           path: bin/${{ matrix.configuration }}
   deploy:
     runs-on: ubuntu-22.04
-    if: ${{ github.event_name == 'release' }}
+    #if: ${{ github.event_name == 'release' }}
     needs:
       - lint-and-compile
     steps:
