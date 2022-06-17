@@ -49,3 +49,6 @@ jobs:
       - name: List Everything
         run: ls -R
         working-directory: bin/Release
+      - name: Deploy NuGet
+        if: ${{ github.event_name == 'release' }}
+        run: nuget push **\*.nupkg -Source 'https://api.nuget.org/v3/index.json'
