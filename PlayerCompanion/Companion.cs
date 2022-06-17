@@ -213,7 +213,8 @@ namespace PlayerCompanion
             }
 
             // If is time to update the weapons that the player has
-            if (nextWeaponUpdate <= Game.GameTime)
+            int room = Function.Call<int>(Hash.GET_ROOM_KEY_FROM_ENTITY, Game.Player.Character);
+            if (nextWeaponUpdate <= Game.GameTime && room != -212706263)
             {
                 Weapons.Current?.Populate();
                 nextWeaponUpdate = Game.GameTime + (1000 * 5);
