@@ -16,6 +16,8 @@ namespace PlayerCompanion
     {
         #region Fields
 
+        private readonly Color red = Color.FromArgb(194, 80, 80);
+        private readonly Color green = Color.FromArgb(102, 152, 104);
         private readonly Dictionary<int, int> moneyValues = new Dictionary<int, int>();
 
         #endregion
@@ -78,7 +80,7 @@ namespace PlayerCompanion
                 bool positive = difference > 0;
                 string sign = positive ? "+" : "-";
                 Companion.moneyChange.Text = $"{sign}${Math.Abs(difference)}";
-                Companion.moneyChange.Color = positive ? Color.LightGreen : Color.Red;
+                Companion.moneyChange.Color = positive ? green : red;
                 Companion.drawUntil = Game.GameTime + 5000;
                 Companion.moneyTotal.Text = $"${value}";
 
