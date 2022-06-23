@@ -36,7 +36,7 @@ jobs:
           path: bin/${{ matrix.configuration }}
   deploy:
     runs-on: ubuntu-22.04
-    #if: ${{ github.event_name == 'release' }}
+    if: ${{ github.event_name == 'release' }}
     needs:
       - lint-and-compile
     steps:
@@ -57,5 +57,4 @@ jobs:
       - name: Repackage Files
         run: 7z a ${{ github.event.repository.name }}.zip ${{ github.workspace }}/bin/Release/*
       - name: Deploy NuGet
-        if: ${{ github.event_name == 'release' }}
         run: dotnet nuget push bin/Release/FOR DEVELOPERS/*.nupkg -s 'https://api.nuget.org/v3/index.json' -k ${{secrets.NUGET}}
