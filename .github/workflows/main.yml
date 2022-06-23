@@ -55,7 +55,7 @@ jobs:
         run: ls -R
         working-directory: bin/Release
       - name: Repackage Files
-        run: 7z a ${{ github.event.repository.name }}.zip ${{ github.workspace }}bin\Release\*
+        run: 7z a ${{ github.event.repository.name }}.zip ${{ github.workspace }}/bin/Release/*
       - name: Deploy NuGet
         if: ${{ github.event_name == 'release' }}
-        run: nuget push bin/Release/FOR DEVELOPERS/*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET}}
+        run: dotnet nuget push bin/Release/FOR DEVELOPERS/*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET}}
