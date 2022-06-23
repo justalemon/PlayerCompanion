@@ -17,6 +17,8 @@ jobs:
         uses: actions/checkout@v3
       - name: Setup .NET
         uses: actions/setup-dotnet@v2.1.0
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v1.0.6
       - name: Restore NuGet Packages
         run: nuget restore ${{ github.event.repository.name }}.sln
       - name: Patch csproj version
