@@ -24,12 +24,15 @@ namespace PlayerCompanion
         /// </summary>
         public void ReloadItems()
         {
-            // Clear all of the items
             Clear();
 
-            // And add all of the items one by one
             foreach (Item item in Companion.Inventories.Current.Items)
             {
+                if (item is StackableItem stackableItem && stackableItem.Count == 0)
+                {
+                    continue;
+                }
+                
                 Add(new InventoryItem(item));
             }
 
