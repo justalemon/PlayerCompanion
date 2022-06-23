@@ -18,7 +18,7 @@ namespace PlayerCompanion
 
         #region Constructor
 
-        internal InventoryItem(Item item) : base(item.Name, "", item is StackableItem s ? s.Count.ToString() : "")
+        internal InventoryItem(Item item) : base(item.Name, item.Description, item is StackableItem s ? s.Count.ToString() : "")
         {
             Item = item;
             Activated += (sender, e) => Item.Use();
