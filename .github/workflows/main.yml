@@ -52,4 +52,4 @@ jobs:
         working-directory: bin/Release
       - name: Deploy NuGet
         if: ${{ github.event_name == 'release' }}
-        run: nuget push **\*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET}}
+        run: nuget push bin/Release/FOR DEVELOPERS/*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET}}
