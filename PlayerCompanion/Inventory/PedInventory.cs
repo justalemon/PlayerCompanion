@@ -220,6 +220,7 @@ namespace PlayerCompanion
         /// </summary>
         private void CountChanged(object sender, EventArgs e)
         {
+            Companion.menu.UpdateItems();
             Save();
         }
         /// <summary>

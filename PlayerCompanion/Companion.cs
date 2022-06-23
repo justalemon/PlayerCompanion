@@ -206,7 +206,7 @@ namespace PlayerCompanion
                 Weapons.Current?.Apply();
                 Inventories.Load(Game.Player.Character.Model);
 
-                menu.ReloadItems();
+                menu.RecreateMenu();
 
                 lastModel = Game.Player.Character.Model;
                 nextWeaponUpdate = Game.GameTime + (1000 * 5);

@@ -1,4 +1,5 @@
-﻿using LemonUI.Menus;
+﻿using System.Collections.Generic;
+using LemonUI.Menus;
 
 namespace PlayerCompanion
 {
@@ -19,10 +20,7 @@ namespace PlayerCompanion
 
         #region Functions
 
-        /// <summary>
-        /// Reloads all of the items on the inventory.
-        /// </summary>
-        public void ReloadItems()
+        public void RecreateMenu()
         {
             Clear();
 
@@ -34,6 +32,18 @@ namespace PlayerCompanion
                 }
                 
                 Add(new InventoryItem(item));
+            }
+        }
+        public void UpdateItems()
+        {
+            foreach (NativeItem item in new List<NativeItem>(Items))
+            {
+                InventoryItem inventoryItem = (InventoryItem)item;
+
+                if (inventoryItem.Item is StackableItem stackableItem && stackableItem.Count == 0)
+                {
+                    Remove(item);
+                }
             }
         }
 
