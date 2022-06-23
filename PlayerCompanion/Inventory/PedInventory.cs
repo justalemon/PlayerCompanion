@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace PlayerCompanion
 {
@@ -105,12 +106,11 @@ namespace PlayerCompanion
         /// </summary>
         public void Save()
         {
-            // Create the path of the items
             string dir = Path.Combine(Companion.location, "Inventory");
             Directory.CreateDirectory(dir);
             string path = Path.Combine(dir, $"{Owner.Hash}.json");
-            // And save the contents
-            string contents = JsonConvert.SerializeObject(items);
+
+            string contents = JsonConvert.SerializeObject(items.Where(x => !(x is StackableItem) || (x is StackableItem stackableItem && stackableItem.Count > 0)));
             File.WriteAllText(path, contents);
         }
         /// <summary>
