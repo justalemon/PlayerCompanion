@@ -35,12 +35,6 @@ namespace PlayerCompanion
                 
                 Add(new InventoryItem(item));
             }
-
-            // If we ended up with items, reset the selected index
-            if (Items.Count > 0)
-            {
-                SelectedIndex = 0;
-            }
         }
 
         #endregion
