@@ -65,26 +65,7 @@ namespace PlayerCompanion
         
         #region Tools
 
-        private T FindTypeGeneric<T>(bool returnNull) where T: Item
-        {
-            foreach (Item item in items)
-            {
-                if (item is T actualItem)
-                {
-                    return actualItem;
-                }
-            }
-
-            if (returnNull)
-            {
-                return null;
-            }
-
-            T newItem = Activator.CreateInstance<T>();
-            Add(newItem);
-            return newItem;
-        }
-        private Item FindTypeType(Type type)
+        private Item FindSpecific(Type type, bool returnNull)
         {
             foreach (Item item in items)
             {
@@ -94,7 +75,14 @@ namespace PlayerCompanion
                 }
             }
 
-            return null;
+            if (returnNull)
+            {
+                return null;
+            }
+
+            Item created = (Item)Activator.CreateInstance(type);
+            Add(created);
+            return created;
         }
         
         #endregion
@@ -122,13 +110,13 @@ namespace PlayerCompanion
         /// The item needs to have a parameterless constructor, otherwise an exception might be raised.
         /// </remarks>
         /// <exception cref="MissingMethodException">The item does not has a parameterless constructor.</exception>
-        public T FindOrCreate<T>() where T: StackableItem => FindTypeGeneric<T>(false);
+        public T FindOrCreate<T>() where T: Item => (T)FindSpecific(typeof(T), false);
         /// <summary>
         /// Tries to find an item with the matching type.
         /// </summary>
         /// <typeparam name="T">The type of item to find.</typeparam>
         /// <returns>The item found, or <see langword="null"/> if none were found.</returns>
-        public T FindSingle<T>() where T: StackableItem => FindTypeGeneric<T>(true);
+        public T FindSingle<T>() where T: Item => (T)FindSpecific(typeof(T), true);
         /// <summary>
         /// Finds all of the items that match a specific type.
         /// </summary>
@@ -150,24 +138,14 @@ namespace PlayerCompanion
         /// <typeparam name="T">The type of the Item.</typeparam>
         /// <returns>The item that was found, null otherwise.</returns>
         [Obsolete("Find<T>() and Find(Type) are Obsolete, please use FindOrCreate<T>(), FindSingle<T>() or FindMany<T>() instead", true)]
-        public Item Find<T>()
-        {
-            foreach (Item item in items)
-            {
-                if (item is T)
-                {
-                    return item;
-                }
-            }
-            return null;
-        }
+        public Item Find<T>() => FindSpecific(typeof(T), true);
         /// <summary>
         /// Finds an item with the specified type.
         /// </summary>
         /// <param name="type">The type of the Item.</param>
         /// <returns>The item that was found, null otherwise.</returns>
         [Obsolete("Find<T>() and Find(Type) are Obsolete, please use FindOrCreate<T>(), FindSingle<T>() or FindMany<T>() instead", true)]
-        public Item Find(Type type) => FindTypeType(type);
+        public Item Find(Type type) => FindSpecific(type, true);
         /// <summary>
         /// Adds an item to this inventory.
         /// </summary>
@@ -187,7 +165,7 @@ namespace PlayerCompanion
 
             if (item is StackableItem stackable)
             {
-                if (FindTypeType(item.GetType()) is StackableItem found)
+                if (FindSpecific(item.GetType(), true) is StackableItem found)
                 {
                     found.Count += stackable.Count;
                 }
