@@ -58,3 +58,13 @@ jobs:
         run: 7z a ${{ github.event.repository.name }}.zip ${{ github.workspace }}/bin/Release/*
       - name: Deploy NuGet
         run: dotnet nuget push bin/Release/FOR DEVELOPERS/*.nupkg -s 'https://api.nuget.org/v3/index.json' -k ${{secrets.NUGET}}
+      - name: Create Release
+        uses: ncipollo/release-action@v1.10.0
+        with:
+          allowUpdates: true
+          artifactErrorsFailBuild: true
+          artifacts: ${{ github.event.repository.name }}.zip
+          omitBodyDuringUpdate: true
+          omitDraftDuringUpdate: true
+          omitNameDuringUpdate: true
+          omitPrereleaseDuringUpdate: true
