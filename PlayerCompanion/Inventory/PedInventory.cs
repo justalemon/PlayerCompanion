@@ -153,7 +153,7 @@ namespace PlayerCompanion
         /// <summary>
         /// Finds all of the items that match a specific type.
         /// </summary>
-        /// <typeparam name="T">The type of item to find.</typeparam>
+        /// <param name="type">The type of item to find.</param>
         /// <returns>An iterator returning all of the items found.</returns> 
         public IEnumerator<Item> FindMany(Type type)
         {
