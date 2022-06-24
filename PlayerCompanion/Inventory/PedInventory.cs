@@ -205,11 +205,12 @@ namespace PlayerCompanion
                 else
                 {
                     items.Add(item);
+                    
+                    stackable.CountChanged -= CountChanged;
+                    stackable.CountChanged += CountChanged;
+                    
                     added = true;
                 }
-                
-                stackable.CountChanged -= CountChanged;
-                stackable.CountChanged += CountChanged;
             }
             else
             {
