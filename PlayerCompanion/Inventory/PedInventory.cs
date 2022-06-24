@@ -140,9 +140,11 @@ namespace PlayerCompanion
         /// <returns>An iterator returning all of the items found.</returns> 
         public IEnumerator<T> FindMany<T>() where T : Item
         {
+            Type type = typeof(T);
+            
             foreach (Item item in items)
             {
-                if (item is T)
+                if (item.GetType() == type)
                 {
                     yield return (T)item;
                 }
