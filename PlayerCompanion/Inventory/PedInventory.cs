@@ -170,14 +170,14 @@ namespace PlayerCompanion
         /// </summary>
         /// <typeparam name="T">The type of the Item.</typeparam>
         /// <returns>The item that was found, null otherwise.</returns>
-        [Obsolete("Find<T>() and Find(Type) are Obsolete, please use FindOrCreate<T>(), FindSingle<T>() or FindMany<T>() instead", true)]
+        [Obsolete("Find<T>() is Obsolete, please use FindOrCreate<T>(), FindSingle<T>() or FindMany<T>() instead.", true)]
         public Item Find<T>() => FindSpecific(typeof(T), true);
         /// <summary>
         /// Finds an item with the specified type.
         /// </summary>
         /// <param name="type">The type of the Item.</param>
         /// <returns>The item that was found, null otherwise.</returns>
-        [Obsolete("Find<T>() and Find(Type) are Obsolete, please use FindOrCreate<T>(), FindSingle<T>() or FindMany<T>() instead", true)]
+        [Obsolete("Find(Type) is Obsolete, please use FindOrCreate(Type), FindSingle(Type) or FindMany(Type) instead.", true)]
         public Item Find(Type type) => FindSpecific(type, true);
         /// <summary>
         /// Adds an item to this inventory.
