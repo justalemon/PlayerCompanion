@@ -218,14 +218,16 @@ namespace PlayerCompanion
                 added = true;
             }
 
-            if (added)
+            if (!added)
             {
-                ItemChangedEventArgs e = new ItemChangedEventArgs(item);
-                ItemAdded?.Invoke(this, e);
-                manager.OnItemAdded(this, e);
+                return;
             }
             
             Save();
+                
+            ItemChangedEventArgs e = new ItemChangedEventArgs(item);
+            ItemAdded?.Invoke(this, e);
+            manager.OnItemAdded(this, e);
         }
         /// <summary>
         /// Saves if the count has been changed.
