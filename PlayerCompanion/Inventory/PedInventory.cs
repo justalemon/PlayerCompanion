@@ -112,11 +112,27 @@ namespace PlayerCompanion
         /// <exception cref="MissingMethodException">The item does not has a parameterless constructor.</exception>
         public T FindOrCreate<T>() where T: Item => (T)FindSpecific(typeof(T), false);
         /// <summary>
+        /// Tries to find an item with the matching type. If is not found, it will add a new one to the inventory.
+        /// </summary>
+        /// <param name="type">The type of item to find.</param>
+        /// <returns>The item found, or a new one that was added to the inventory with the same type.</returns>
+        /// <remarks>
+        /// The item needs to have a parameterless constructor, otherwise an exception might be raised.
+        /// </remarks>
+        /// <exception cref="MissingMethodException">The item does not has a parameterless constructor.</exception>
+        public Item FindOrCreate(Type type) => FindSpecific(type, false);
+        /// <summary>
         /// Tries to find an item with the matching type.
         /// </summary>
         /// <typeparam name="T">The type of item to find.</typeparam>
         /// <returns>The item found, or <see langword="null"/> if none were found.</returns>
         public T FindSingle<T>() where T: Item => (T)FindSpecific(typeof(T), true);
+        /// <summary>
+        /// Tries to find an item with the matching type.
+        /// </summary>
+        /// <param name="type">The type of item to find.</param>
+        /// <returns>The item found, or <see langword="null"/> if none were found.</returns>
+        public Item FindSingle(Type type) => FindSpecific(type, true);
         /// <summary>
         /// Finds all of the items that match a specific type.
         /// </summary>
@@ -129,6 +145,21 @@ namespace PlayerCompanion
                 if (item is T)
                 {
                     yield return (T)item;
+                }
+            }
+        }
+        /// <summary>
+        /// Finds all of the items that match a specific type.
+        /// </summary>
+        /// <typeparam name="T">The type of item to find.</typeparam>
+        /// <returns>An iterator returning all of the items found.</returns> 
+        public IEnumerator<Item> FindMany(Type type)
+        {
+            foreach (Item item in items)
+            {
+                if (item.GetType() == type)
+                {
+                    yield return item;
                 }
             }
         }
