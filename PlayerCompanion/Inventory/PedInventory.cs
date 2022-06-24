@@ -202,7 +202,7 @@ namespace PlayerCompanion
             }
             else
             {
-                Items.Add(item);
+                items.Add(item);
                 added = true;
             }
 
