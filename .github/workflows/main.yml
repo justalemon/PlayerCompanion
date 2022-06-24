@@ -25,6 +25,7 @@ jobs:
         uses: justalemon/VersionPatcher@v0.4
         with:
           version: 1.2.2.${{ github.run_number }}
+          use-tag: true
           csproj-files: "**/**.csproj"
       - name: Compile
         working-directory: ${{ env.GITHUB_WORKSPACE }}
