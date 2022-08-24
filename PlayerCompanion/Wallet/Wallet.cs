@@ -84,7 +84,7 @@ namespace PlayerCompanion
                 Companion.drawUntil = Game.GameTime + 5000;
                 Companion.moneyTotal.Text = $"${value}";
 
-                if (model == PedHash.Michael || model == PedHash.Franklin || model == PedHash.Franklin)
+                if (model == PedHash.Michael || model == PedHash.Franklin || model == PedHash.Trevor)
                 {
                     int stat = 0;
                     switch ((PedHash)model)
