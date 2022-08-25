@@ -4,7 +4,7 @@
     <TargetFramework>net48</TargetFramework>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <AssemblyName>$(AssemblyName)</AssemblyName>
+    <AssemblyName>$$(AssemblyName)</AssemblyName>
     <DefineConstants>SHVDN3</DefineConstants>
     <Version>1.2.2</Version>
     <OutputPath>..\bin\$(Configuration)\</OutputPath>
