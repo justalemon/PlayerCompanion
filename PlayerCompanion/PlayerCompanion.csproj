@@ -33,7 +33,7 @@
 
   <ItemGroup>
     <Reference Include="System.Windows.Forms" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageReference Include="ScriptHookVDotNet3" Version="3.3.2">
       <IncludeAssets>compile</IncludeAssets>
     </PackageReference>
